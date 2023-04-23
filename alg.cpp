@@ -2,6 +2,8 @@
 #include "tools.h"
 #include <fstream>
 #include <iostream>
+#include <set>
+#include <unordered_map>
 void Graph::readGraph(string &path){
     ifstream ifs;
     ifs.open(path);
@@ -37,6 +39,14 @@ void Graph::readGraph(string &path){
         this->adj_find[loc] = left;
     }
     ifs.close();
+    int loc = 0;
+    for(int i = 0; i<vNum; ++i){
+        multiset<int> s;
+        while(loc<node_adj[i]+node_degree[i]){
+            s.insert(node_label[adj_find[loc++]]);
+        }
+        neighbor[i] = s;
+    }
 }
 
 void Graph::printGraph() {
@@ -49,5 +59,30 @@ void Graph::printGraph() {
     print_vector_one(adj_find);
     cout<<"adj_degree"<<endl;
     print_vector_one(node_degree);
+    cout<<"Neighbor"<<endl;
+    print_Neighbor();
     cout<<"==============================printGraph"<<endl;
+}
+
+void Graph::print_Neighbor() {
+    for (const auto& i: neighbor) {
+        cout<<i.first<<":";
+        for (auto j: i.second) {
+            cout<<j<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+
+void findKernel(Graph &graph,vector<int> &kernel_set) {
+
+}
+
+void preProsessing(Graph &graph,vector<int> &kernelSet,unordered_map<int,vector<pair<int,int>>> &index){
+
+}
+
+void findMatch(unordered_map<int,vector<pair<int,int>>> &index,int node_1,int node_2,bool flag){
+
 }
