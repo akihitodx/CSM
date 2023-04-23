@@ -13,16 +13,9 @@ void Graph::readGraph(string &path){
     int id,adj=0,degree,label;
     int vNum,eNum;
     ifs>>type>>vNum>>eNum;
-    cout<<vNum<<" "<<eNum<<endl;
-//    this->node_id.resize(vNum,-1);
-//    this->node_label.resize(vNum,-1);
-//    this->node_degree.resize(vNum,-1);
-//    this->node_adj.resize(vNum,-1);
     for(int i = 0;i<vNum;++i){
         ifs>>type>>id>>label>>degree;
-        cout<<id<<" "<<label<<" "<<degree<<" "<<endl;
         this->node_id.emplace_back(id);
-
         this->node_label.emplace_back(label);
         this->node_adj.emplace_back(adj);
         this->node_degree.emplace_back(degree);
@@ -38,7 +31,7 @@ void Graph::readGraph(string &path){
         }
         this->adj_find[loc] = right;
         loc = this->node_adj[right];
-        while(this->adj_find[loc] != -1){
+        while(this->adj_find[loc] != -1 ){
             ++loc;
         }
         this->adj_find[loc] = left;

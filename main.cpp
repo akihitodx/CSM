@@ -4,11 +4,15 @@
 #include <fstream>
 #include <assert.h>
 int main() {
-    string path = "../querySet";
-    Graph *p = new Graph();
-    p->readGraph(path);
-    p->printGraph();
-
+//    string queryPath = "../querySet";
+//    Graph *querySet = new Graph();
+//    querySet->readGraph(queryPath);
+//    querySet->printGraph();
+    cout<<"1"<<endl;
+    string dataPath = "../dataSet";
+    Graph *dataSet = new Graph();
+    dataSet->readGraph(dataPath);
+    dataSet->printGraph();
 
 
 
