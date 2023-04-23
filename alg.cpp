@@ -4,6 +4,8 @@
 #include <iostream>
 #include <set>
 #include <unordered_map>
+#include <unordered_set>
+#include <queue>
 void Graph::readGraph(string &path){
     ifstream ifs;
     ifs.open(path);
@@ -15,6 +17,8 @@ void Graph::readGraph(string &path){
     int id,adj=0,degree,label;
     int vNum,eNum;
     ifs>>type>>vNum>>eNum;
+    this->vNum = vNum;
+    this->eNum = eNum;
     for(int i = 0;i<vNum;++i){
         ifs>>type>>id>>label>>degree;
         this->node_id.emplace_back(id);
@@ -75,9 +79,22 @@ void Graph::print_Neighbor() {
 }
 
 
-void findKernel(Graph &graph,vector<int> &kernel_set) {
+vector<int> findKernel(Graph &graph,unordered_set<int> &vertex,int node) {
+    vector<int> kernel_set;
+    queue<int> q;
+    q.push(node);
+    while(!q.empty()){
+        auto cur = q.front();
+        q.pop();
+        for (int i = graph.node_adj[cur]; i <graph.node_adj[cur]+graph.node_degree[cur] ; ++i) {
+            q.push(i);
+        }
+    }
 
+
+    return kernel_set;
 }
+
 
 void preProsessing(Graph &graph,vector<int> &kernelSet,unordered_map<int,vector<pair<int,int>>> &index){
 
