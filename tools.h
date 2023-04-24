@@ -6,7 +6,7 @@
 using namespace  std;
 
 template<typename T>
-void print_vector_one(vector<T> &vec){
+void print_vector_one(const vector<T> &vec){
     for(auto i:vec){
         cout<<i<<" ";
     }
@@ -14,7 +14,7 @@ void print_vector_one(vector<T> &vec){
 }
 
 template<typename T>
-void print_vector_two(vector<vector<T>> &vec){
+void print_vector_two(const vector<vector<T>> &vec){
     for (auto i:vec) {
         for(auto j: vec){
             cout<<j<<" ";

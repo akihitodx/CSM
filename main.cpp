@@ -4,15 +4,25 @@
 #include <fstream>
 #include <assert.h>
 int main() {
-    string queryPath = "../querySet";
+//    string queryPath = "../test/querySet";
+//    Graph *querySet = new Graph();
+//    querySet->readGraph(queryPath);
+//    querySet->printGraph();
+
+//    string dataPath = "../dataSet";
+//    Graph *dataSet = new Graph();
+//    dataSet->readGraph(dataPath);
+//    dataSet->printGraph();
+
+//    string queryPath = "../test/demo01";
+//    string queryPath = "../test/cricle";
+    string queryPath = "../test/querySet";
     Graph *querySet = new Graph();
     querySet->readGraph(queryPath);
     querySet->printGraph();
 
-    string dataPath = "../dataSet";
-    Graph *dataSet = new Graph();
-    dataSet->readGraph(dataPath);
-    dataSet->printGraph();
+    auto res = findKernel(*querySet);
+    print_vector_one(res);
 
 
 

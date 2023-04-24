@@ -25,6 +25,7 @@ void Graph::readGraph(string &path){
         this->node_label.emplace_back(label);
         this->node_adj.emplace_back(adj);
         this->node_degree.emplace_back(degree);
+        max_degree_id = node_degree[max_degree_id] < degree ? id : max_degree_id;
         adj += degree;
     }
     this->adj_find.resize(adj,-1);
@@ -63,6 +64,7 @@ void Graph::printGraph() {
     print_vector_one(adj_find);
     cout<<"adj_degree"<<endl;
     print_vector_one(node_degree);
+    cout<<"max_degree_id:"<<max_degree_id<<endl;
     cout<<"Neighbor"<<endl;
     print_Neighbor();
     cout<<"==============================printGraph"<<endl;
@@ -79,22 +81,73 @@ void Graph::print_Neighbor() {
 }
 
 
-vector<int> findKernel(Graph &graph,unordered_set<int> &vertex,int node) {
+vector<int> findKernel(const Graph &graph) {
+    int nodeNum = graph.vNum;
     vector<int> kernel_set;
-    queue<int> q;
-    q.push(node);
-    while(!q.empty()){
-        auto cur = q.front();
-        q.pop();
-        for (int i = graph.node_adj[cur]; i <graph.node_adj[cur]+graph.node_degree[cur] ; ++i) {
-            q.push(i);
+    auto degree = graph.node_degree;
+    unordered_set<int> adj;
+    degree[graph.max_degree_id] = -1;
+    kernel_set.emplace_back(graph.max_degree_id);
+    --nodeNum;
+    int max_loc=-1;
+    int max_degree = -1;
+    //第一次 进行初始化
+    for (int i = graph.node_adj[graph.max_degree_id]; i < graph.node_adj[graph.max_degree_id]+ graph.node_degree[graph.max_degree_id]; ++i) {
+        int id = graph.adj_find[i];
+        --degree[id];
+//        if(max_degree<degree[id]){
+//            max_degree = degree[id];
+//            max_loc = id;
+//        }
+        if(degree[id]==0){
+            --nodeNum;
+            continue;
+        }
+        adj.insert(id);
+    }
+    // 开始寻找核心
+    int flag = false;
+    while(nodeNum>0){
+        if (!flag){
+            max_loc = findMax(adj,degree);
+            max_degree = degree[max_loc];
+            flag = false;
+        }
+        kernel_set.emplace_back(max_loc);
+        adj.erase(max_loc);
+        --nodeNum;
+        degree[max_loc] = -1;
+        for (int i = graph.node_adj[max_loc]; i < graph.node_adj[max_loc]+ graph.node_degree[max_loc]; ++i) {
+            int id = graph.adj_find[i];
+            if(degree[id]<0) continue;
+            --degree[id];
+            if(degree[id]==0){
+                --nodeNum;
+                continue;
+            }
+            if (adj.count(id==0)){
+                adj.insert(id);
+                if(max_degree<degree[id]){
+                    flag = true;
+                    max_degree = degree[id];
+                    max_loc = id;
+                }
+            }
         }
     }
-
-
     return kernel_set;
 }
-
+int findMax(unordered_set<int> &adj,vector<int> degree){
+    int maxDegree = -1;
+    int maxId = -1;
+    for(auto i : adj){
+        if (maxDegree<degree[i]){
+            maxDegree = degree[i];
+            maxId = i;
+        }
+    }
+    return maxId;
+}
 
 void preProsessing(Graph &graph,vector<int> &kernelSet,unordered_map<int,vector<pair<int,int>>> &index){
 

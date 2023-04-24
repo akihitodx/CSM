@@ -16,7 +16,7 @@ public:
     vector<int> node_degree;
     unordered_map<int,multiset<int>> neighbor;
 
-    long sum_adj_find=0;
+    int max_degree_id=0;
 
 public:
     void readGraph(string &path);
@@ -25,13 +25,15 @@ public:
 };
 /**
  * 只覆盖点集 当点集归零 边集自然也归零
- * @param graph
- * @param vertex 复制于node_id
- * @param node 默认为0
+ * 要求：度最大优先 且保持连通状态
+ * @param graph 查询图
+ * @param nodeNum 顶点个数
  */
-vector<int> findKernel(Graph &graph,unordered_set<int> &vertex,int node=0);
+vector<int> findKernel(const Graph &graph);
 
-void preProsessing(Graph &graph,vector<int> &kernelSet,unordered_map<int,multiset<int>> &queryNeighbor,unordered_map<int,vector<pair<int,int>>> &index);
+int findMax(unordered_set<int> &adj,vector<int> degree);
+
+void preProsessing(const Graph &graph,vector<int> &kernelSet,unordered_map<int,multiset<int>> &queryNeighbor,unordered_map<int,vector<pair<int,int>>> &index);
 /**
  * 在索引内寻找匹配 目前仅实现增加操作 默认为增加操作
  * @param index
