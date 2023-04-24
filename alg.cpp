@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <queue>
+#include <algorithm>
 void Graph::readGraph(string &path){
     ifstream ifs;
     ifs.open(path);
@@ -25,7 +26,8 @@ void Graph::readGraph(string &path){
         this->node_label.emplace_back(label);
         this->node_adj.emplace_back(adj);
         this->node_degree.emplace_back(degree);
-        max_degree_id = node_degree[max_degree_id] < degree ? id : max_degree_id;
+        this->max_degree_id = node_degree[max_degree_id] < degree ? id : max_degree_id;
+        this->label_set[label].insert(id);
         adj += degree;
     }
     this->adj_find.resize(adj,-1);
@@ -67,7 +69,19 @@ void Graph::printGraph() {
     cout<<"max_degree_id:"<<max_degree_id<<endl;
     cout<<"Neighbor"<<endl;
     print_Neighbor();
+    cout<<"label_set"<<endl;
+    print_label_set();
     cout<<"==============================printGraph"<<endl;
+}
+
+void Graph::print_label_set() {
+    for (auto i: label_set) {
+        cout<<i.first<<":";
+        for (auto j: i.second) {
+            cout<<j<<" ";
+        }
+        cout<<endl;
+    }
 }
 
 void Graph::print_Neighbor() {
@@ -90,15 +104,10 @@ vector<int> findKernel(const Graph &graph) {
     kernel_set.emplace_back(graph.max_degree_id);
     --nodeNum;
     int max_loc=-1;
-    int max_degree = -1;
     //第一次 进行初始化
     for (int i = graph.node_adj[graph.max_degree_id]; i < graph.node_adj[graph.max_degree_id]+ graph.node_degree[graph.max_degree_id]; ++i) {
         int id = graph.adj_find[i];
         --degree[id];
-//        if(max_degree<degree[id]){
-//            max_degree = degree[id];
-//            max_loc = id;
-//        }
         if(degree[id]==0){
             --nodeNum;
             continue;
@@ -138,6 +147,11 @@ int findMax(const unordered_set<int> &adj,const vector<int> &degree){
         }
     }
     return maxId;
+}
+
+bool Match(multiset<int> queryNode,multiset<int> dataNode){
+    // dataNode 包含 querNode
+    return includes(dataNode.begin(),dataNode.end(),queryNode.begin(),queryNode.end());
 }
 
 void preProsessing(Graph &graph,vector<int> &kernelSet,unordered_map<int,vector<pair<int,int>>> &index){

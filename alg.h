@@ -15,6 +15,7 @@ public:
     vector<int> adj_find;
     vector<int> node_degree;
     unordered_map<int,multiset<int>> neighbor;
+    unordered_map<int,unordered_set<int>> label_set;
 
     int max_degree_id=0;
 
@@ -22,7 +23,11 @@ public:
     void readGraph(string &path);
     void printGraph();
     void print_Neighbor();
+    void print_label_set();
 };
+
+extern
+
 /**
  * 只覆盖点集 基于度 当点集归零 边集自然也归零
  * 要求：度最大优先 且保持连通状态
@@ -30,7 +35,20 @@ public:
  */
 vector<int> findKernel(const Graph &graph);
 
+/**
+ * 寻找当前邻接组内最大度数节点
+ * 配合findKernel()使用
+ * @param adj
+ * @param degree
+ * @return
+ */
 int findMax(const unordered_set<int> &adj,const vector<int> &degree);
+
+
+
+
+
+
 
 void preProsessing(const Graph &graph,vector<int> &kernelSet,unordered_map<int,multiset<int>> &queryNeighbor,unordered_map<int,vector<pair<int,int>>> &index);
 /**
@@ -43,6 +61,8 @@ void preProsessing(const Graph &graph,vector<int> &kernelSet,unordered_map<int,m
 void findMatch(unordered_map<int,vector<pair<int,int>>> &index,int node_1,int node_2,bool flag=true);
 
 void updateIndex();
+
+bool Match(multiset<int> queryNode,multiset<int> daraNode);
 
 
 #endif //CSM_ALG_H
