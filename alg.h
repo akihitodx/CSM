@@ -24,10 +24,9 @@ public:
     void print_Neighbor();
 };
 /**
- * 只覆盖点集 当点集归零 边集自然也归零
+ * 只覆盖点集 基于度 当点集归零 边集自然也归零
  * 要求：度最大优先 且保持连通状态
  * @param graph 查询图
- * @param nodeNum 顶点个数
  */
 vector<int> findKernel(const Graph &graph);
 

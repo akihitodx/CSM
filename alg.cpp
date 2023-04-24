@@ -108,11 +108,12 @@ vector<int> findKernel(const Graph &graph) {
     // 开始寻找核心
     int flag = false;
     while(nodeNum>0){
-        if (!flag){
-            max_loc = findMax(adj,degree);
-            max_degree = degree[max_loc];
-            flag = false;
-        }
+//        if (!flag){
+//            max_loc = findMax(adj,degree);
+//            max_degree = degree[max_loc];
+//            flag = false;
+//        }
+        max_loc = findMax(adj,degree);
         kernel_set.emplace_back(max_loc);
         adj.erase(max_loc);
         --nodeNum;
@@ -125,18 +126,19 @@ vector<int> findKernel(const Graph &graph) {
                 --nodeNum;
                 continue;
             }
-            if (adj.count(id==0)){
+            if (adj.count(id)==0){
                 adj.insert(id);
-                if(max_degree<degree[id]){
-                    flag = true;
-                    max_degree = degree[id];
-                    max_loc = id;
-                }
+//                if(max_degree<degree[id]){
+//                    flag = true;
+//                    max_degree = degree[id];
+//                    max_loc = id;
+//                }
             }
         }
     }
     return kernel_set;
 }
+
 int findMax(unordered_set<int> &adj,vector<int> degree){
     int maxDegree = -1;
     int maxId = -1;

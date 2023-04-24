@@ -16,7 +16,8 @@ int main() {
 
 //    string queryPath = "../test/demo01";
 //    string queryPath = "../test/cricle";
-    string queryPath = "../test/querySet";
+//    string queryPath = "../test/querySet";
+    string queryPath = "../test/dataSet";
     Graph *querySet = new Graph();
     querySet->readGraph(queryPath);
     querySet->printGraph();
