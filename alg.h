@@ -30,7 +30,7 @@ public:
  */
 vector<int> findKernel(const Graph &graph);
 
-int findMax(unordered_set<int> &adj,vector<int> degree);
+int findMax(const unordered_set<int> &adj,const vector<int> &degree);
 
 void preProsessing(const Graph &graph,vector<int> &kernelSet,unordered_map<int,multiset<int>> &queryNeighbor,unordered_map<int,vector<pair<int,int>>> &index);
 /**
