@@ -176,17 +176,17 @@ void preProsessing(Graph &query, Graph &data,unordered_map<int,vector<int>> &com
         //获取当前数据节点的标签 所对应的查询节点标签的顶点集合 <label,id>
         auto label_set = query.label_set[data.node_label[data_node]];
         for(auto i: label_set){
-            //对于每一个查询顶点 进行集合比较 如果包含，则将这个数据节点添加进com_index   query_id: data_id...
+            //对于每一个查询顶点 进行集合比较 如果包含，则将这个数据节点添加进com_index   data_id: query_id...
             if(com_Match(query.neighbor[i],data.neighbor[data_node])){
-                com_index[i].push_back(data_node);
+                com_index[data_node].push_back(i);
             }else{
                 //如果不满足包含，进行缺一比较  返回值>=0 则是缺失的标签 -1则不满足缺一
                 auto tar = miss_Match(query.neighbor[i],data.neighbor[data_node]);
                 if( tar != -1){
-                    //满足缺一 添加进索引  query_id: data_id->(miss_query_id01,miss_query_id02...) ...
+                    //满足缺一 添加进索引  data_id: query_id->miss_query_id ...
                     for(int k = query.adj_find[i]; k<query.node_adj[i]+ query.node_degree[i];++k){
                         if(query.node_label[k] == tar){
-                            miss_index[i].push_back({data_node,k});
+                            miss_index[data_node].push_back({i,k});
                         }
                     }
                 }
