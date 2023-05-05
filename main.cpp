@@ -34,7 +34,7 @@ int main() {
     unordered_map<int,set<int>> com_index;
     unordered_map<int,set<pair<int,int>>> miss_index;
     preProsessing(*querySet,*dataSet,com_index,miss_index);
-
+    cout<<"!!!!!!!!!!!!!!!!"<<endl;
     for (auto i: com_index) {
         cout<<i.first<<": ";
         for (auto j: i.second) {
@@ -42,7 +42,7 @@ int main() {
         }
         cout<<endl;
     }
-cout<<"================"<<endl;
+    cout<<"================"<<endl;
     for (auto i: miss_index) {
         cout<<i.first<<": ";
         for (auto j: i.second) {
@@ -50,7 +50,7 @@ cout<<"================"<<endl;
         }
         cout<<endl;
     }
-
+    cout<<"!!!!!!!!!!!!!!!!"<<endl;
     updateIndex(2,3,*querySet,*dataSet,com_index,miss_index);
 
 

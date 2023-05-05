@@ -179,6 +179,7 @@ void preProsessing(Graph &query, Graph &data,unordered_map<int,set<int>> &com_in
             //对于每一个查询顶点 进行集合比较 如果包含，则将这个数据节点添加进com_index   data_id: query_id...
             if(com_Match(query.neighbor[i],data.neighbor[data_node])){
                 com_index[data_node].insert(i);
+                miss_index[data_node].insert({i,-1});
             }else{
                 //如果不满足包含，进行缺一比较  返回值>=0 则是缺失的标签 -1则不满足缺一
                 auto tar = miss_Match(query.neighbor[i],data.neighbor[data_node]);
