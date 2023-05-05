@@ -204,19 +204,36 @@ void updateIndex(int a, int b ,Graph &query, Graph &data,unordered_map<int,set<i
     auto find_miss_a = miss_index.find(a);
     auto find_com_b = com_index.find(b);
     auto find_miss_b = miss_index.find(b);
-    //两个索引都没找到a,不匹配,尝试进行缺一索引更新
-    if(find_com_a==com_index.end() && find_miss_a==miss_index.end()){
-        auto label_set = query.label_set[data.node_label[a]];
-        for(auto i: label_set){
-            auto tar = miss_Match(query.neighbor[i],data.neighbor[a]);
-            if( tar != -1){
-                //满足缺一 添加进索引  data_id: query_id->miss_query_id ...
-                for(int k = query.adj_find[i]; k<query.node_adj[i]+ query.node_degree[i];++k){
-                    if(query.node_label[k] == tar){
-                        miss_index[a].insert({i,k});
-                    }
-                }
-            }
-        }
+
+    //如果都是完全匹配， 必定存在匹配
+    if(find_com_a != com_index.end() && find_com_b!= com_index.end()){
+        //进行匹配 确定双方是否都有彼此
+        return;
     }
+    // a,b不满足缺一和完全， 必定不存在匹配
+    if(find_miss_a != miss_index.end() || find_miss_b!= miss_index.end()){
+        //不进行匹配
+        return;
+    }
+    //a完全 b缺一 可能存在匹配
+    if(find_com_a != com_index.end() && find_com_b==com_index.end() && find_miss_b!=miss_index.end()){
+
+        return;
+    }
+
+    //b完全 a缺一 可能存在匹配
+    if(find_com_b != com_index.end() && find_com_a==com_index.end() && find_miss_a!=miss_index.end()){
+
+        return;
+    }
+    //a缺一，b缺一 可能存在
+    if(find_com_a == com_index.end() && find_com_b==com_index.end() && find_miss_a!=miss_index.end() && find_miss_b!=miss_index.end()){
+
+        return;
+    }
+
+
+
+
+
 }
