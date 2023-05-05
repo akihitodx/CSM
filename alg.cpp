@@ -171,14 +171,14 @@ void findMatch(unordered_map<int,vector<pair<int,int>>> &index,int node_1,int no
 
 }
 
-void preProsessing(Graph &query, Graph &data,unordered_map<int,vector<int>> &com_index,unordered_map<int,vector<pair<int,int>>> &miss_index){
+void preProsessing(Graph &query, Graph &data,unordered_map<int,set<int>> &com_index,unordered_map<int,set<pair<int,int>>> &miss_index){
     for (auto data_node:data.node_id) {
         //获取当前数据节点的标签 所对应的查询节点标签的顶点集合 <label,id>
         auto label_set = query.label_set[data.node_label[data_node]];
         for(auto i: label_set){
             //对于每一个查询顶点 进行集合比较 如果包含，则将这个数据节点添加进com_index   data_id: query_id...
             if(com_Match(query.neighbor[i],data.neighbor[data_node])){
-                com_index[data_node].push_back(i);
+                com_index[data_node].insert(i);
             }else{
                 //如果不满足包含，进行缺一比较  返回值>=0 则是缺失的标签 -1则不满足缺一
                 auto tar = miss_Match(query.neighbor[i],data.neighbor[data_node]);
@@ -186,7 +186,7 @@ void preProsessing(Graph &query, Graph &data,unordered_map<int,vector<int>> &com
                     //满足缺一 添加进索引  data_id: query_id->miss_query_id ...
                     for(int k = query.adj_find[i]; k<query.node_adj[i]+ query.node_degree[i];++k){
                         if(query.node_label[k] == tar){
-                            miss_index[data_node].push_back({i,k});
+                            miss_index[data_node].insert({i,k});
                         }
                     }
                 }

@@ -66,7 +66,7 @@ void updateIndex();
 
 bool Match(multiset<int> queryNode,multiset<int> dataNode);
 
-void preProsessing(Graph &query, Graph &data,unordered_map<int,vector<int>> &com_index,unordered_map<int,vector<pair<int,int>>> &miss_index);
+void preProsessing(Graph &query, Graph &data,unordered_map<int,set<int>> &com_index,unordered_map<int,set<pair<int,int>>> &miss_index);
 
 bool com_Match(multiset<int> &queryNode,multiset<int> &dataNode);
 int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode);

@@ -31,8 +31,8 @@ int main() {
     print_vector_one(res);
 
 
-    unordered_map<int,vector<int>> com_index;
-    unordered_map<int,vector<pair<int,int>>> miss_index;
+    unordered_map<int,set<int>> com_index;
+    unordered_map<int,set<pair<int,int>>> miss_index;
     preProsessing(*querySet,*dataSet,com_index,miss_index);
 
     for (auto i: com_index) {
