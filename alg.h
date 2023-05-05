@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <set>
+#include <queue>
 #include <unordered_set>
 using namespace std;
 class Graph{
@@ -26,9 +27,10 @@ public:
     void print_label_set();
 };
 
-extern
+
 
 /**
+ * 有优化空间 因为寻找核心的时候每次都进行了查询与比较
  * 只覆盖点集 基于度 当点集归零 边集自然也归零
  * 要求：度最大优先 且保持连通状态
  * @param graph 查询图
@@ -63,6 +65,7 @@ void findMatch(unordered_map<int,vector<pair<int,int>>> &index,int node_1,int no
 void updateIndex();
 
 bool Match(multiset<int> queryNode,multiset<int> daraNode);
+
 
 
 #endif //CSM_ALG_H

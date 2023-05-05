@@ -137,6 +137,7 @@ vector<int> findKernel(const Graph &graph) {
     return kernel_set;
 }
 
+
 int findMax(const unordered_set<int> &adj,const vector<int> &degree){
     int maxDegree = -1;
     int maxId = -1;
