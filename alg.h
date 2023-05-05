@@ -64,8 +64,10 @@ void findMatch(unordered_map<int,vector<pair<int,int>>> &index,int node_1,int no
 
 void updateIndex();
 
-bool Match(multiset<int> queryNode,multiset<int> daraNode);
+bool Match(multiset<int> queryNode,multiset<int> dataNode);
 
+void preProsessing(Graph &query, Graph &data,unordered_map<int,vector<int>> &com_index,unordered_map<int,vector<pair<int,int>>> &miss_index);
 
-
+bool com_Match(multiset<int> &queryNode,multiset<int> &dataNode);
+int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode);
 #endif //CSM_ALG_H

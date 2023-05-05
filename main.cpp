@@ -17,13 +17,39 @@ int main() {
 //    string queryPath = "../test/demo01";
 //    string queryPath = "../test/cricle";
 //    string queryPath = "../test/querySet";
-    string queryPath = "../test/dataSet";
+    string queryPath = "../test/querySet";
     Graph *querySet = new Graph();
     querySet->readGraph(queryPath);
     querySet->printGraph();
 
+    string dataPath = "../test/dataSet";
+    Graph *dataSet = new Graph();
+    dataSet->readGraph(dataPath);
+    dataSet->printGraph();
+
     auto res = findKernel(*querySet);
     print_vector_one(res);
+
+
+    unordered_map<int,vector<int>> com_index;
+    unordered_map<int,vector<pair<int,int>>> miss_index;
+    preProsessing(*querySet,*dataSet,com_index,miss_index);
+
+    for (auto i: com_index) {
+        cout<<i.first<<": ";
+        for (auto j: i.second) {
+            cout<<j<<" ";
+        }
+        cout<<endl;
+    }
+cout<<"================"<<endl;
+    for (auto i: miss_index) {
+        cout<<i.first<<": ";
+        for (auto j: i.second) {
+            cout<<j.first<<"->"<<j.second<<" ";
+        }
+        cout<<endl;
+    }
 
 
 

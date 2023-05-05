@@ -150,15 +150,47 @@ int findMax(const unordered_set<int> &adj,const vector<int> &degree){
     return maxId;
 }
 
-bool Match(multiset<int> queryNode,multiset<int> dataNode){
+bool com_Match(multiset<int> &queryNode,multiset<int> &dataNode){
     // dataNode 包含 querNode
     return includes(dataNode.begin(),dataNode.end(),queryNode.begin(),queryNode.end());
 }
 
+int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode){
+    vector<int> target;
+    set_difference(queryNode.begin(),queryNode.end(),dataNode.begin(),dataNode.end(),back_inserter(target));
+    if(target.size()==1){
+        return target[0];
+    }
+    return -1;
+}
 void preProsessing(Graph &graph,vector<int> &kernelSet,unordered_map<int,vector<pair<int,int>>> &index){
 
 }
 
 void findMatch(unordered_map<int,vector<pair<int,int>>> &index,int node_1,int node_2,bool flag){
 
+}
+
+void preProsessing(Graph &query, Graph &data,unordered_map<int,vector<int>> &com_index,unordered_map<int,vector<pair<int,int>>> &miss_index){
+    for (auto data_node:data.node_id) {
+        //获取当前数据节点的标签 所对应的查询节点标签的顶点集合 <label,id>
+        auto label_set = query.label_set[data.node_label[data_node]];
+        for(auto i: label_set){
+            //对于每一个查询顶点 进行集合比较 如果包含，则将这个数据节点添加进com_index   query_id: data_id...
+            if(com_Match(query.neighbor[i],data.neighbor[data_node])){
+                com_index[i].push_back(data_node);
+            }else{
+                //如果不满足包含，进行缺一比较  返回值>=0 则是缺失的标签 -1则不满足缺一
+                auto tar = miss_Match(query.neighbor[i],data.neighbor[data_node]);
+                if( tar != -1){
+                    //满足缺一 添加进索引  query_id: data_id->(miss_query_id01,miss_query_id02...) ...
+                    for(int k = query.adj_find[i]; k<query.node_adj[i]+ query.node_degree[i];++k){
+                        if(query.node_label[k] == tar){
+                            miss_index[i].push_back({data_node,k});
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
