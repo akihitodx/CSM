@@ -51,6 +51,8 @@ cout<<"================"<<endl;
         cout<<endl;
     }
 
+    updateIndex(2,3,*querySet,*dataSet,com_index,miss_index);
+
 
 
 

@@ -194,3 +194,28 @@ void preProsessing(Graph &query, Graph &data,unordered_map<int,set<int>> &com_in
         }
     }
 }
+
+void updateIndex(int a, int b ,Graph &query, Graph &data,unordered_map<int,set<int>> &com_index,unordered_map<int,set<pair<int,int>>> &miss_index){
+    data.neighbor[a].insert(data.node_label[b]);
+    data.neighbor[b].insert(data.node_label[a]);
+    //更新a
+    auto find_com_a = com_index.find(a);
+    auto find_miss_a = miss_index.find(a);
+    auto find_com_b = com_index.find(b);
+    auto find_miss_b = miss_index.find(b);
+    //两个索引都没找到a,不匹配,尝试进行缺一索引更新
+    if(find_com_a==com_index.end() && find_miss_a==miss_index.end()){
+        auto label_set = query.label_set[data.node_label[a]];
+        for(auto i: label_set){
+            auto tar = miss_Match(query.neighbor[i],data.neighbor[a]);
+            if( tar != -1){
+                //满足缺一 添加进索引  data_id: query_id->miss_query_id ...
+                for(int k = query.adj_find[i]; k<query.node_adj[i]+ query.node_degree[i];++k){
+                    if(query.node_label[k] == tar){
+                        miss_index[a].insert({i,k});
+                    }
+                }
+            }
+        }
+    }
+}
