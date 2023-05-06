@@ -213,6 +213,7 @@ void preProsessing(Graph &query, Graph &data,vector<unordered_set<int>> &com_ind
 void updateIndex(int node, int nei ,Graph &query, Graph &data,vector<unordered_set<int>> &com_index,vector<multimap<int,int>> &miss_index){
     //邻居表更新
     data.neighbor[node].insert(data.node_label[nei]);
+    data.adj[node].insert(nei);
     //获取该数据节点可能对应的查询节点 （即标签匹配） 对于每一个查询节点进行匹配
     auto label_set = query.label_set[data.node_label[node]];
     for(auto i :label_set){
@@ -234,13 +235,11 @@ void updateIndex(int node, int nei ,Graph &query, Graph &data,vector<unordered_s
             }else{ //不构成匹配 尝试进行缺一匹配
                 int v = miss_Match(query.neighbor[i],data.neighbor[node]);
                 if(v!= -1){ //构成了缺一匹配
-                    for(int k = query.adj_find[query.node_adj[i]]; k<query.node_adj[i]+query.node_degree[i];++k){
-                        if(query.node_label[k] == v){
-                            miss_index[node].insert({i,k});
+                    for(auto v : data.adj[node]){
+                        if (data.node_label[v] == data.node_label[nei]){
+                            miss_index[node].insert({i,v});
                         }
                     }
-
-                    for
                 }
             }
         }

@@ -45,7 +45,7 @@ int main() {
     print_com_index(com_index);
     print_miss_index(miss_index);
 
-    updateIndex(2,3,*querySet,*dataSet,com_index,miss_index);
+    updateIndex(3,2,*querySet,*dataSet,com_index,miss_index);
 
     print_com_index(com_index);
     print_miss_index(miss_index);
