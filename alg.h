@@ -16,8 +16,8 @@ public:
     vector<int> node_adj;
     vector<int> adj_find;
     vector<int> node_degree;
-    unordered_map<int,multiset<int>> neighbor;
-    unordered_map<int,unordered_set<int>> label_set;
+    unordered_map<int,multiset<int>> neighbor;        //node_id: nei_node01_label...
+    unordered_map<int,unordered_set<int>> label_set;  //label: node_id ...
 
     int max_degree_id=0;
 
@@ -61,13 +61,11 @@ void preProsessing(const Graph &graph,vector<int> &kernelSet,unordered_map<int,m
  * @param node_2
  * @param flag true 增加 false 减少
  */
-void findMatch(unordered_map<int,vector<pair<int,int>>> &index,int node_1,int node_2,bool flag=true);
 
-void updateIndex(int a, int b ,Graph &query, Graph &data,unordered_map<int,set<int>> &com_index,unordered_map<int,multimap<int,int>> &miss_index);
+void updateIndex(int a, int b ,Graph &query, Graph &data,vector<unordered_set<int>> &com_index,vector<multimap<int,int>> &miss_index);
 
-bool Match(multiset<int> queryNode,multiset<int> dataNode);
 
-void preProsessing(Graph &query, Graph &data,unordered_map<int,set<int>> &com_index,unordered_map<int,multimap<int,int>> &miss_index);
+void preProsessing(Graph &query, Graph &data,vector<unordered_set<int>> &com_index,vector<multimap<int,int>> &miss_index);
 
 bool com_Match(multiset<int> &queryNode,multiset<int> &dataNode);
 int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode);

@@ -164,15 +164,8 @@ int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode){
     }
     return -1;
 }
-void preProsessing(Graph &graph,vector<int> &kernelSet,unordered_map<int,vector<pair<int,int>>> &index){
 
-}
-
-void findMatch(unordered_map<int,vector<pair<int,int>>> &index,int node_1,int node_2,bool flag){
-
-}
-
-void preProsessing(Graph &query, Graph &data,unordered_map<int,set<int>> &com_index,unordered_map<int,multimap<int,int>> &miss_index){
+void preProsessing(Graph &query, Graph &data,vector<unordered_set<int>> &com_index,vector<multimap<int,int>> &miss_index){
     for (auto data_node:data.node_id) {
         //获取当前数据节点的标签 所对应的查询节点标签的顶点集合 <label,id>
         auto label_set = query.label_set[data.node_label[data_node]];
@@ -186,7 +179,7 @@ void preProsessing(Graph &query, Graph &data,unordered_map<int,set<int>> &com_in
                 auto tar = miss_Match(query.neighbor[i],data.neighbor[data_node]);
                 if( tar != -1){
                     //满足缺一 添加进索引  data_id: query_id->miss_query_id ...
-                    for(int k = query.adj_find[i]; k<query.node_adj[i]+ query.node_degree[i];++k){
+                    for(int k = query.adj_find[query.node_adj[i]]; k<query.node_adj[i]+ query.node_degree[i];++k){
                         if(query.node_label[k] == tar){
                             miss_index[data_node].insert({i,k});
                         }
@@ -197,10 +190,45 @@ void preProsessing(Graph &query, Graph &data,unordered_map<int,set<int>> &com_in
     }
 }
 
-void updateIndex(int a, int b ,Graph &query, Graph &data,unordered_map<int,set<int>> &com_index,unordered_map<int,multimap<int,int>> &miss_index){
-    data.neighbor[a].insert(data.node_label[b]);
-    data.neighbor[b].insert(data.node_label[a]);
-    //更新a
+void updateIndex(int node, int nei ,Graph &query, Graph &data,vector<unordered_set<int>> &com_index,vector<multimap<int,int>> &miss_index){
+    //邻居表更新
+    data.neighbor[node].insert(data.node_label[nei]);
+    //获取该数据节点可能对应的查询节点 （即标签匹配） 对于每一个查询节点进行匹配
+    auto label_set = query.label_set[data.node_label[node]];
+    for(auto i :label_set){
+        //完全匹配 无需更新
+        if(com_index[node].size() == 0 || com_index[node].find(i) == com_index[node].end()){ //不是该查询顶点的完全匹配
+            //缺一匹配 可能发生变化
+            if(miss_index[node].size() != 0 && miss_index[node].count(i)>0){ //构成缺一匹配 测试是不是构成了新完全匹配
+                auto it = miss_index[node].find(i);
+                for(int count = 0  ; count != miss_index[node].count(i) ;++count,++it){
+                    if(data.node_label[nei] == query.node_label[it->second]){
+                        //满足条件 构成完全匹配了
+                        com_index[node].insert(i);
+                    }
+                }
+                //删除miss_index[node]中的冗余部分 更新com_index[node]的内容
+                miss_index[node].erase(i);
+                miss_index[node].insert({i,-1});
+
+            }else{ //不构成匹配 尝试进行缺一匹配
+                int v = miss_Match(query.neighbor[i],data.neighbor[node]);
+                if(v!= -1){ //构成了缺一匹配
+                    for(int k = query.adj_find[query.node_adj[i]]; k<query.node_adj[i]+query.node_degree[i];++k){
+                        if(query.node_label[k] == v){
+                            miss_index[node].insert({i,k});
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    data.neighbor[nei].insert(data.node_label[node]);
+
+
+/*
     auto find_com_a = com_index.find(a);
     auto find_miss_a = miss_index.find(a);
     auto find_com_b = com_index.find(b);
@@ -252,7 +280,7 @@ void updateIndex(int a, int b ,Graph &query, Graph &data,unordered_map<int,set<i
     }
 
 
-
+*/
 
 
 }

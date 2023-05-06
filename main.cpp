@@ -33,30 +33,21 @@ int main() {
     print_vector_one(res);
 
 
-    unordered_map<int,set<int>> com_index;
-    unordered_map<int,unordered_map<int,int>> miss_index;
+    vector<unordered_set<int>> com_index;
+    com_index.resize(dataSet->vNum);
+    vector<multimap<int,int>> miss_index;
+    miss_index.resize(dataSet->vNum);
     preProsessing(*querySet,*dataSet,com_index,miss_index);
-    cout<<"!!!!!!!!!!!!!!!!"<<endl;
-    for (auto i: com_index) {
-        cout<<i.first<<": ";
-        for (auto j: i.second) {
-            cout<<j<<" ";
-        }
-        cout<<endl;
-    }
-    cout<<"================"<<endl;
-    for (auto i: miss_index) {
-        cout<<i.first<<": ";
-        for (auto j: i.second) {
-            cout<<j.first<<"->"<<j.second<<" ";
-        }
-        cout<<endl;
-    }
-    cout<<"!!!!!!!!!!!!!!!!"<<endl;
+    print_com_index(com_index);
+    print_miss_index(miss_index);
+
     updateIndex(2,3,*querySet,*dataSet,com_index,miss_index);
 
-
+    print_com_index(com_index);
+    print_miss_index(miss_index);
 
 
 
 }
+
+
