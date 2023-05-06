@@ -23,12 +23,13 @@ int main() {
 //    string queryPath = "../test/demo01";
 //    string queryPath = "../test/cricle";
 //    string queryPath = "../test/querySet";
-    string queryPath = "../test/querySet";
+//    string queryPath = "../test/querySet";
+    string queryPath = "../test/upIndex_Q";
     Graph *querySet = new Graph();
     querySet->readGraph(queryPath);
     querySet->printGraph();
 
-    string dataPath = "../test/dataSet";
+    string dataPath = "../test/upIndex_D";
     Graph *dataSet = new Graph();
     dataSet->readGraph(dataPath);
     dataSet->printGraph();
@@ -44,12 +45,19 @@ int main() {
     preProsessing(*querySet,*dataSet,com_index,miss_index);
     print_com_index(com_index);
     print_miss_index(miss_index);
-
-    updateIndex(3,2,*querySet,*dataSet,com_index,miss_index);
-
+cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl;
+    updateIndex(5,0,*querySet,*dataSet,com_index,miss_index);
     print_com_index(com_index);
     print_miss_index(miss_index);
-
+    cout<<"!!!!!!!!!"<<endl;
+    updateIndex(0,5,*querySet,*dataSet,com_index,miss_index);
+    print_com_index(com_index);
+    print_miss_index(miss_index);
+    cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl;
+    updateIndex(6,0,*querySet,*dataSet,com_index,miss_index);
+    updateIndex(0,6,*querySet,*dataSet,com_index,miss_index);
+    print_com_index(com_index);
+    print_miss_index(miss_index);
 
 
 }

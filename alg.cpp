@@ -199,9 +199,14 @@ void preProsessing(Graph &query, Graph &data,vector<unordered_set<int>> &com_ind
                 auto tar = miss_Match(query.neighbor[i],data.neighbor[data_node]);
                 if( tar != -1){
                     //满足缺一 添加进索引  data_id: query_id->miss_query_id ...
-                    for(int k = query.adj_find[query.node_adj[i]]; k<query.node_adj[i]+ query.node_degree[i];++k){
-                        if(query.node_label[k] == tar){
-                            miss_index[data_node].insert({i,k});
+//                    for(int k = query.adj_find[query.node_adj[i]]; k<query.node_adj[i]+ query.node_degree[i];++k){
+//                        if(query.node_label[k] == tar){
+//                            miss_index[data_node].insert({i,query.adj_find[k]});
+//                        }
+//                    }
+                    for(auto j: query.adj[i]){
+                        if(query.node_label[j] == tar){
+                            miss_index[data_node].insert({i,j});
                         }
                     }
                 }
@@ -233,10 +238,10 @@ void updateIndex(int node, int nei ,Graph &query, Graph &data,vector<unordered_s
                 miss_index[node].insert({i,-1});
 
             }else{ //不构成匹配 尝试进行缺一匹配
-                int v = miss_Match(query.neighbor[i],data.neighbor[node]);
-                if(v!= -1){ //构成了缺一匹配
-                    for(auto v : data.adj[node]){
-                        if (data.node_label[v] == data.node_label[nei]){
+                int vv = miss_Match(query.neighbor[i],data.neighbor[node]);
+                if(vv!= -1){ //构成了缺一匹配
+                    for(auto v : query.adj[node]){
+                        if (query.node_label[v] == vv){
                             miss_index[node].insert({i,v});
                         }
                     }
