@@ -1,9 +1,13 @@
 #include <iostream>
-#include "tools.h"
+
 #include "alg.h"
 #include <fstream>
-#include <assert.h>
+//#include <assert.h>
 #include <map>
+#include "tools.h"
+
+void print_miss_index(vector<multimap<int, int>> &miss_index);
+void print_com_index(vector<unordered_set<int>> &com_index);
 
 int main() {
 //    string queryPath = "../test/querySet";
@@ -47,7 +51,32 @@ int main() {
     print_miss_index(miss_index);
 
 
-
 }
 
 
+
+void print_com_index(vector<unordered_set<int>> &com_index) {
+    cout<<"com_index================"<<endl;
+    int n = 0;
+    for (auto i: com_index) {
+        cout<<n++<<": ";
+        for (auto j: i) {
+            cout<<j<<" ";
+        }
+        cout<<endl;
+    }
+    cout<<"================"<<endl;
+}
+
+void print_miss_index(vector<multimap<int, int>> &miss_index) {
+    cout << "miss_index================" << endl;
+    int n = 0;
+    for (auto i: miss_index) {
+        cout<<n++<<": ";
+        for (auto j: i) {
+            cout<<j.first<<"->"<<j.second<<" ";
+        }
+        cout<<endl;
+    }
+    cout<<"================"<<endl;
+}
