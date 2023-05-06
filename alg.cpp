@@ -7,6 +7,7 @@
 #include <unordered_set>
 #include <queue>
 #include <algorithm>
+#include <map>
 void Graph::readGraph(string &path){
     ifstream ifs;
     ifs.open(path);
@@ -171,7 +172,7 @@ void findMatch(unordered_map<int,vector<pair<int,int>>> &index,int node_1,int no
 
 }
 
-void preProsessing(Graph &query, Graph &data,unordered_map<int,set<int>> &com_index,unordered_map<int,set<pair<int,int>>> &miss_index){
+void preProsessing(Graph &query, Graph &data,unordered_map<int,set<int>> &com_index,unordered_map<int,multimap<int,int>> &miss_index){
     for (auto data_node:data.node_id) {
         //获取当前数据节点的标签 所对应的查询节点标签的顶点集合 <label,id>
         auto label_set = query.label_set[data.node_label[data_node]];
@@ -196,7 +197,7 @@ void preProsessing(Graph &query, Graph &data,unordered_map<int,set<int>> &com_in
     }
 }
 
-void updateIndex(int a, int b ,Graph &query, Graph &data,unordered_map<int,set<int>> &com_index,unordered_map<int,set<pair<int,int>>> &miss_index){
+void updateIndex(int a, int b ,Graph &query, Graph &data,unordered_map<int,set<int>> &com_index,unordered_map<int,multimap<int,int>> &miss_index){
     data.neighbor[a].insert(data.node_label[b]);
     data.neighbor[b].insert(data.node_label[a]);
     //更新a
@@ -217,18 +218,36 @@ void updateIndex(int a, int b ,Graph &query, Graph &data,unordered_map<int,set<i
     }
     //a完全 b缺一 可能存在匹配
     if(find_com_a != com_index.end() && find_com_b==com_index.end() && find_miss_b!=miss_index.end()){
-
+        auto index_b = miss_index[b];
+        auto index_a = miss_index[a];
+        for(auto i : index_b){
+            if(index_a.find(i.second)!=index_a.end()){
+                //找到匹配
+                //执行回溯搜索
+            }
+        }
         return;
     }
 
     //b完全 a缺一 可能存在匹配
     if(find_com_b != com_index.end() && find_com_a==com_index.end() && find_miss_a!=miss_index.end()){
-
+        auto index_b = miss_index[b];
+        auto index_a = miss_index[a];
+        for(auto i : index_a){
+            if(index_b.find(i.second)!=index_b.end()){
+                //找到匹配
+                //执行回溯搜索
+            }
+        }
         return;
     }
     //a缺一，b缺一 可能存在
     if(find_com_a == com_index.end() && find_com_b==com_index.end() && find_miss_a!=miss_index.end() && find_miss_b!=miss_index.end()){
+        auto index_b = miss_index[b];
+        auto index_a = miss_index[a];
+        for(auto i:index_a){
 
+        }
         return;
     }
 

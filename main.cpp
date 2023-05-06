@@ -3,6 +3,8 @@
 #include "alg.h"
 #include <fstream>
 #include <assert.h>
+#include <map>
+
 int main() {
 //    string queryPath = "../test/querySet";
 //    Graph *querySet = new Graph();
@@ -32,7 +34,7 @@ int main() {
 
 
     unordered_map<int,set<int>> com_index;
-    unordered_map<int,set<pair<int,int>>> miss_index;
+    unordered_map<int,unordered_map<int,int>> miss_index;
     preProsessing(*querySet,*dataSet,com_index,miss_index);
     cout<<"!!!!!!!!!!!!!!!!"<<endl;
     for (auto i: com_index) {

@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <set>
+#include <map>
 #include <queue>
 #include <unordered_set>
 using namespace std;
@@ -62,11 +63,11 @@ void preProsessing(const Graph &graph,vector<int> &kernelSet,unordered_map<int,m
  */
 void findMatch(unordered_map<int,vector<pair<int,int>>> &index,int node_1,int node_2,bool flag=true);
 
-void updateIndex(int a, int b ,Graph &query, Graph &data,unordered_map<int,set<int>> &com_index,unordered_map<int,set<pair<int,int>>> &miss_index);
+void updateIndex(int a, int b ,Graph &query, Graph &data,unordered_map<int,set<int>> &com_index,unordered_map<int,multimap<int,int>> &miss_index);
 
 bool Match(multiset<int> queryNode,multiset<int> dataNode);
 
-void preProsessing(Graph &query, Graph &data,unordered_map<int,set<int>> &com_index,unordered_map<int,set<pair<int,int>>> &miss_index);
+void preProsessing(Graph &query, Graph &data,unordered_map<int,set<int>> &com_index,unordered_map<int,multimap<int,int>> &miss_index);
 
 bool com_Match(multiset<int> &queryNode,multiset<int> &dataNode);
 int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode);
