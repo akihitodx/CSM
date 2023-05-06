@@ -55,6 +55,8 @@ void Graph::readGraph(string &path){
         }
         neighbor[i] = s;
     }
+
+    set_adj();
 }
 
 void Graph::printGraph() {
@@ -94,7 +96,25 @@ void Graph::print_Neighbor() {
         cout<<endl;
     }
 }
+void Graph::set_adj() {
+    adj.resize(vNum);
+    int begin = 0;
+    for(int i = 0;i<vNum;++i){
+        adj[i] = unordered_set(adj_find.begin()+begin,adj_find.begin()+begin+node_degree[i]);
+        begin = begin +node_degree[i];
+    }
+}
 
+void Graph::print_adj() {
+    int n = 0;
+    for(auto i: adj){
+        cout<<n++<<": ";
+        for(auto j : i){
+            cout<<j<<" ";
+        }
+        cout<<endl;
+    }
+}
 
 vector<int> findKernel(const Graph &graph) {
     int nodeNum = graph.vNum;
@@ -219,6 +239,8 @@ void updateIndex(int node, int nei ,Graph &query, Graph &data,vector<unordered_s
                             miss_index[node].insert({i,k});
                         }
                     }
+
+                    for
                 }
             }
         }

@@ -18,6 +18,7 @@ public:
     vector<int> node_degree;
     unordered_map<int,multiset<int>> neighbor;        //node_id: nei_node01_label...
     unordered_map<int,unordered_set<int>> label_set;  //label: node_id ...
+    vector<unordered_set<int>> adj;
 
     int max_degree_id=0;
 
@@ -26,6 +27,8 @@ public:
     void printGraph();
     void print_Neighbor();
     void print_label_set();
+    void set_adj();
+    void print_adj();
 };
 
 
