@@ -251,7 +251,7 @@ void updateIndex(int node, int nei ,Graph &query, Graph &data,vector<unordered_s
     }
 
 
-    data.neighbor[nei].insert(data.node_label[node]);
+//    data.neighbor[nei].insert(data.node_label[node]);
 
 
 /*
