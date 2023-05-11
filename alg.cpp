@@ -8,21 +8,21 @@
 #include <queue>
 #include <algorithm>
 #include <map>
-void Graph::readGraph(string &path){
+void Graph::readGraph(string &path) {
     ifstream ifs;
     ifs.open(path);
-    if(!ifs.is_open()){
-        cout<<path<<" open failed"<<endl;
+    if (!ifs.is_open()) {
+        cout << path << " open failed" << endl;
         exit(0);
     }
     char type;
-    int id,adj=0,degree,label;
-    int vNum,eNum;
-    ifs>>type>>vNum>>eNum;
+    int id, adj = 0, degree, label;
+    int vNum, eNum;
+    ifs >> type >> vNum >> eNum;
     this->vNum = vNum;
     this->eNum = eNum;
-    for(int i = 0;i<vNum;++i){
-        ifs>>type>>id>>label>>degree;
+    for (int i = 0; i < vNum; ++i) {
+        ifs >> type >> id >> label >> degree;
         this->node_id.emplace_back(id);
         this->node_label.emplace_back(label);
         this->node_adj.emplace_back(adj);
@@ -31,34 +31,44 @@ void Graph::readGraph(string &path){
         this->label_set[label].insert(id);
         adj += degree;
     }
-    this->adj_find.resize(adj,-1);
-    int left,right;
+    this->adj_find.resize(adj, -1);
+    int left, right;
     for (int i = 0; i < eNum; ++i) {
-        ifs>>type>>left>>right;
+        ifs >> type >> left >> right;
         int loc = this->node_adj[left];
-        while(this->adj_find[loc] != -1){
+        while (this->adj_find[loc] != -1) {
             ++loc;
         }
         this->adj_find[loc] = right;
         loc = this->node_adj[right];
-        while(this->adj_find[loc] != -1 ){
+        while (this->adj_find[loc] != -1) {
             ++loc;
         }
         this->adj_find[loc] = left;
+
+        pair<int,int> label_group;
+        if(this->node_label[left]<this->node_label[right]){
+            label_group = {this->node_label[left],this->node_label[right]};
+            this->edge_count[label_group].insert({left, right});
+        }else{
+            label_group = {this->node_label[right],this->node_label[left]};
+            this->edge_count[label_group].insert({right, left});
+        }
+
     }
     ifs.close();
     int loc = 0;
-    for(int i = 0; i<vNum; ++i){
+    for (int i = 0; i < vNum; ++i) {
         multiset<int> s;
-        while(loc<node_adj[i]+node_degree[i]){
+        while (loc < node_adj[i] + node_degree[i]) {
             s.insert(node_label[adj_find[loc++]]);
         }
         neighbor[i] = s;
     }
 
     set_adj();
-}
 
+}
 void Graph::printGraph() {
     cout<<"printGraph=============================="<<endl;
     cout<<"node_label"<<endl;
@@ -111,6 +121,16 @@ void Graph::print_adj() {
         cout<<n++<<": ";
         for(auto j : i){
             cout<<j<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+void Graph::print_edge_count(){
+    for(auto i : edge_count){
+        cout<<"label->("<<i.first.first<<","<<i.first.second<<") : id->";
+        for(auto j:i.second){
+            cout<<"("<<j.first<<","<<j.second<<"), ";
         }
         cout<<endl;
     }

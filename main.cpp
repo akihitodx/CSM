@@ -28,6 +28,7 @@ int main() {
     Graph *querySet = new Graph();
     querySet->readGraph(queryPath);
     querySet->printGraph();
+    querySet->print_edge_count();
 
     string dataPath = "../test/upIndex_D";
     Graph *dataSet = new Graph();
