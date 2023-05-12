@@ -24,7 +24,7 @@ int main() {
 //    string queryPath = "../test/cricle";
 //    string queryPath = "../test/querySet";
 //    string queryPath = "../test/querySet";
-    string queryPath = "../test/querySet";
+    string queryPath = "../test/upIndex_Q";
     Graph *querySet = new Graph();
     querySet->readGraph(queryPath);
     querySet->printGraph();
@@ -35,9 +35,8 @@ int main() {
     dataSet->readGraph(dataPath);
     dataSet->printGraph();
 
-    querySet->set_kernel();
-    querySet->print_kernel();
-
+    auto res = findKernel(*querySet);
+    print_vector_one(res);
 
 
     vector<unordered_set<int>> com_index;
