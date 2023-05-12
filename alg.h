@@ -54,23 +54,10 @@ unordered_set<int> findKernel(const Graph &graph);
  */
 int findMax(const unordered_set<int> &adj,const vector<int> &degree);
 
-
-
-
-
-
-
 void preProsessing(const Graph &graph,vector<int> &kernelSet,unordered_map<int,multiset<int>> &queryNeighbor,unordered_map<int,vector<pair<int,int>>> &index);
-/**
- * 在索引内寻找匹配 目前仅实现增加操作 默认为增加操作
- * @param index
- * @param node_1
- * @param node_2
- * @param flag true 增加 false 减少
- */
+
 
 void updateIndex(int a, int b ,Graph &query, Graph &data,vector<unordered_set<int>> &com_index,vector<multimap<int,int>> &miss_index);
-
 
 void preProsessing(Graph &query, Graph &data,vector<unordered_set<int>> &com_index,vector<multimap<int,int>> &miss_index);
 

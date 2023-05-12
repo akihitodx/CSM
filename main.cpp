@@ -24,7 +24,7 @@ int main() {
 //    string queryPath = "../test/cricle";
 //    string queryPath = "../test/querySet";
 //    string queryPath = "../test/querySet";
-//a
+//
     string queryPath = "../test/querySet";
     Graph *querySet = new Graph();
     querySet->readGraph(queryPath);
