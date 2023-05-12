@@ -338,3 +338,34 @@ void updateIndex(int node, int nei ,Graph &query, Graph &data,vector<unordered_s
 
 
 }
+
+vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, vector<unordered_set<int>> &com_index ){
+    int label_a = data.node_label[node_a];
+    int label_b = data.node_label[node_b];
+    pair<int,int> edge_ab;
+    if(label_a<label_b){
+        edge_ab = {label_a,label_b};
+    }else{
+        edge_ab = {label_b,label_a};
+    }
+    auto edge_match = query.edge_count[edge_ab];
+    auto com_a = com_index[node_a];
+    auto com_b = com_index[node_b];
+    vector<pair<int,int>> should_match;
+    for (auto i: edge_match) {
+        if(label_a == edge_ab.first){
+            if(com_a.find(i.first) != com_a.end()  && com_b.find(i.second) != com_b.end()  ){
+                should_match.emplace_back(i);
+            }
+        }else{
+            if(com_a.find(i.second) != com_a.end()  && com_b.find(i.first) != com_b.end()  ){
+                should_match.emplace_back(i);
+            }
+        }
+    }
+    for(auto match : should_match){
+        bool flag_a ;
+        bool flag_b;
+    }
+
+}
