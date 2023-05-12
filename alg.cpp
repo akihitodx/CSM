@@ -135,14 +135,24 @@ void Graph::print_edge_count(){
         cout<<endl;
     }
 }
+void Graph::print_kernel() {
+    cout<<"kernel_set: ";
+    for (auto i : kernel_set) {
+        cout<<i<<" ";
+    }
+    cout<<endl;
+}
+void Graph::set_kernel(){
+    this->kernel_set = findKernel(*this);
+}
 
-vector<int> findKernel(const Graph &graph) {
+unordered_set<int> findKernel(const Graph &graph) {
     int nodeNum = graph.vNum;
-    vector<int> kernel_set;
+    unordered_set<int> kernel_set;
     auto degree = graph.node_degree;
     unordered_set<int> adj;
     degree[graph.max_degree_id] = -1;
-    kernel_set.emplace_back(graph.max_degree_id);
+    kernel_set.insert(graph.max_degree_id);
     --nodeNum;
     int max_loc=-1;
     //第一次 进行初始化
@@ -158,7 +168,7 @@ vector<int> findKernel(const Graph &graph) {
     // 开始寻找核心
     while(nodeNum>0){
         max_loc = findMax(adj,degree);
-        kernel_set.emplace_back(max_loc);
+        kernel_set.insert(max_loc);
         adj.erase(max_loc);
         --nodeNum;
         degree[max_loc] = -1;
@@ -176,6 +186,7 @@ vector<int> findKernel(const Graph &graph) {
         }
     }
     return kernel_set;
+
 }
 
 
@@ -328,5 +339,36 @@ void updateIndex(int node, int nei ,Graph &query, Graph &data,vector<unordered_s
 
 */
 
+
+}
+
+vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, vector<unordered_set<int>> &com_index ){
+    int label_a = data.node_label[node_a];
+    int label_b = data.node_label[node_b];
+    pair<int,int> edge_ab;
+    if(label_a<label_b){
+        edge_ab = {label_a,label_b};
+    }else{
+        edge_ab = {label_b,label_a};
+    }
+    auto edge_match = query.edge_count[edge_ab];
+    auto com_a = com_index[node_a];
+    auto com_b = com_index[node_b];
+    vector<pair<int,int>> should_match;
+    for (auto i: edge_match) {
+        if(label_a == edge_ab.first){
+            if(com_a.find(i.first) != com_a.end()  && com_b.find(i.second) != com_b.end()  ){
+                should_match.emplace_back(i);
+            }
+        }else{
+            if(com_a.find(i.second) != com_a.end()  && com_b.find(i.first) != com_b.end()  ){
+                should_match.emplace_back(i);
+            }
+        }
+    }
+    for(auto match : should_match){
+        bool flag_a ;
+        bool flag_b;
+    }
 
 }
