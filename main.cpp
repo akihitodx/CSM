@@ -25,19 +25,21 @@ int main() {
 //    string queryPath = "../test/querySet";
 //    string queryPath = "../test/querySet";
 //
-    string queryPath = "../test/querySet";
+//    string queryPath = "../test/querySet";
+    string queryPath = "../test/datasets/human/query_graph/query_dense_8_2.graph";
     Graph *querySet = new Graph();
     querySet->readGraph(queryPath);
     querySet->printGraph();
     querySet->print_edge_count();
 
-    string dataPath = "../test/upIndex_D";
+    querySet->set_kernel();
+    querySet->print_kernel();
+
+    string dataPath = "../test/dataSet";
     Graph *dataSet = new Graph();
     dataSet->readGraph(dataPath);
     dataSet->printGraph();
 
-    querySet->set_kernel();
-    querySet->print_kernel();
 
 
     vector<unordered_set<int>> com_index;

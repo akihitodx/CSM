@@ -33,8 +33,9 @@ void Graph::readGraph(string &path) {
     }
     this->adj_find.resize(adj, -1);
     int left, right;
+    int temp;
     for (int i = 0; i < eNum; ++i) {
-        ifs >> type >> left >> right;
+        ifs >> type >> left >> right >> temp;
         int loc = this->node_adj[left];
         while (this->adj_find[loc] != -1) {
             ++loc;
@@ -339,13 +340,19 @@ void updateIndex(int node, int nei ,Graph &query, Graph &data,vector<unordered_s
 }
 
 vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, vector<unordered_set<int>> &com_index ){
+    vector<vector<int>> res;
     int label_a = data.node_label[node_a];
     int label_b = data.node_label[node_b];
     pair<int,int> edge_ab;
+    int a,b;
     if(label_a<label_b){
         edge_ab = {label_a,label_b};
+        a = 0;
+        b = 1;
     }else{
         edge_ab = {label_b,label_a};
+        a = 1;
+        b = 0;
     }
     auto edge_match = query.edge_count[edge_ab];
     auto com_a = com_index[node_a];
@@ -363,8 +370,7 @@ vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &
         }
     }
     for(auto match : should_match){
-        bool flag_a ;
-        bool flag_b;
+
     }
 
 }
