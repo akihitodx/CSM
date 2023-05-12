@@ -26,6 +26,7 @@ int main() {
 //    string queryPath = "../test/querySet";
 //
 //    string queryPath = "../test/querySet";
+//a
     string queryPath = "../test/datasets/human/query_graph/query_dense_8_2.graph";
     Graph *querySet = new Graph();
     querySet->readGraph(queryPath);
