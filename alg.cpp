@@ -114,7 +114,6 @@ void Graph::set_adj() {
         begin = begin +node_degree[i];
     }
 }
-
 void Graph::print_adj() {
     int n = 0;
     for(auto i: adj){
@@ -125,7 +124,6 @@ void Graph::print_adj() {
         cout<<endl;
     }
 }
-
 void Graph::print_edge_count(){
     for(auto i : edge_count){
         cout<<"label->("<<i.first.first<<","<<i.first.second<<") : id->";
@@ -135,14 +133,24 @@ void Graph::print_edge_count(){
         cout<<endl;
     }
 }
+void Graph::print_kernel(){
+    cout<<"kernel_set: ";
+    for (auto i: kernel_set) {
+        cout<<i<<" ";
+    }
+    cout<<endl;
+}
+void Graph::set_kernel() {
+    this->kernel_set = findKernel(*this);
+}
 
-vector<int> findKernel(const Graph &graph) {
+unordered_set<int> findKernel(const Graph &graph) {
     int nodeNum = graph.vNum;
-    vector<int> kernel_set;
+    unordered_set<int> kernel_set;
     auto degree = graph.node_degree;
     unordered_set<int> adj;
     degree[graph.max_degree_id] = -1;
-    kernel_set.emplace_back(graph.max_degree_id);
+    kernel_set.insert(graph.max_degree_id);
     --nodeNum;
     int max_loc=-1;
     //第一次 进行初始化
@@ -158,7 +166,7 @@ vector<int> findKernel(const Graph &graph) {
     // 开始寻找核心
     while(nodeNum>0){
         max_loc = findMax(adj,degree);
-        kernel_set.emplace_back(max_loc);
+        kernel_set.insert(max_loc);
         adj.erase(max_loc);
         --nodeNum;
         degree[max_loc] = -1;

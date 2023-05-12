@@ -21,6 +21,7 @@ public:
     vector<unordered_set<int>> adj;
     map<pair<int,int>,set<pair<int,int>>> edge_count; // <label_a,label_b> -> {(0,1),(2,3) ...}  label_a < label_b
     int max_degree_id=0;
+    unordered_set<int> kernel_set;  // only for query
 
 public:
     void readGraph(string &path);
@@ -30,6 +31,8 @@ public:
     void set_adj();
     void print_adj();
     void print_edge_count();
+    void print_kernel();
+    void set_kernel();
 };
 
 
@@ -40,7 +43,7 @@ public:
  * 要求：度最大优先 且保持连通状态
  * @param graph 查询图
  */
-vector<int> findKernel(const Graph &graph);
+unordered_set<int> findKernel(const Graph &graph);
 
 /**
  * 寻找当前邻接组内最大度数节点
@@ -73,4 +76,6 @@ void preProsessing(Graph &query, Graph &data,vector<unordered_set<int>> &com_ind
 
 bool com_Match(multiset<int> &queryNode,multiset<int> &dataNode);
 int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode);
+
+
 #endif //CSM_ALG_H
