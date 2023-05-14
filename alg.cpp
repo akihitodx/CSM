@@ -235,77 +235,34 @@ void updateIndex(int node, int nei ,Graph &query, Graph &data, Index &index){
             }
         }
     }
-
-
-//    data.neighbor[nei].insert(data.node_label[node]);
-
-
-/*
-    auto find_com_a = com_index.find(a);
-    auto find_miss_a = miss_index.find(a);
-    auto find_com_b = com_index.find(b);
-    auto find_miss_b = miss_index.find(b);
-
-    //如果都是完全匹配， 必定存在匹配
-    if(find_com_a != com_index.end() && find_com_b!= com_index.end()){
-        //进行匹配 确定双方是否都有彼此
-        return;
-    }
-    // a,b不满足缺一和完全， 必定不存在匹配
-    if(find_miss_a != miss_index.end() || find_miss_b!= miss_index.end()){
-        //不进行匹配
-        return;
-    }
-    //a完全 b缺一 可能存在匹配
-    if(find_com_a != com_index.end() && find_com_b==com_index.end() && find_miss_b!=miss_index.end()){
-        auto index_b = miss_index[b];
-        auto index_a = miss_index[a];
-        for(auto i : index_b){
-            if(index_a.find(i.second)!=index_a.end()){
-                //找到匹配
-                //执行回溯搜索
-            }
-        }
-        return;
-    }
-
-    //b完全 a缺一 可能存在匹配
-    if(find_com_b != com_index.end() && find_com_a==com_index.end() && find_miss_a!=miss_index.end()){
-        auto index_b = miss_index[b];
-        auto index_a = miss_index[a];
-        for(auto i : index_a){
-            if(index_b.find(i.second)!=index_b.end()){
-                //找到匹配
-                //执行回溯搜索
-            }
-        }
-        return;
-    }
-    //a缺一，b缺一 可能存在
-    if(find_com_a == com_index.end() && find_com_b==com_index.end() && find_miss_a!=miss_index.end() && find_miss_b!=miss_index.end()){
-        auto index_b = miss_index[b];
-        auto index_a = miss_index[a];
-        for(auto i:index_a){
-
-        }
-        return;
-    }
-
-
-*/
-
-
 }
 
 void doubleKernel_match(int main){
 
 }
 
-void singleKernel_match(int main,vector<int> &match_table){
+void singleKernel_match(int main,int is_query,vector<int> &match_table,Kernel &kernel, Graph &data, vector<int> &kernel_match,vector<vector<int>> &res, Index &index){
+//    if( *(kernel_match.end()-1) ==  0){
+//        if(*(match_table.end()-1) == 0){
+//            res.push_back({match_table.begin(),match_table.end()-1});
+//        }
+//    }
+
+
+    if()
+
+
+    auto kernel_nei = kernel.adj[is_query];
+    for(auto i : kernel_nei){
+        auto com = index.com_index_query[i];
+        for(auto j : com){
+
+        }
+    }
 
 }
 
-vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, vector<unordered_set<int>> &com_index ){
+vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, Index &index ){
     vector<vector<int>> res;
     int label_a = data.node_label[node_a];
     int label_b = data.node_label[node_b];
@@ -321,8 +278,8 @@ vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &
         b = 0;
     }
     auto edge_match = query.edge_count[edge_ab];
-    auto com_a = com_index[node_a];
-    auto com_b = com_index[node_b];
+    auto com_a = index.com_index[node_a];
+    auto com_b = index.com_index[node_b];
     vector<pair<int,int>> should_match;
     for (auto i: edge_match) {
         if(label_a == edge_ab.first){
@@ -349,9 +306,12 @@ vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &
                     unordered_map<int,unordered_set<int>> maybe_kernel;
                     auto nei_query = query.kernel->adj[match.second];  //这些核心顶点的匹配周围必循存在node_b
                     vector<int> match_table;
-                    match_table.resize(query.vNum,-1);
-                    match_table[match.first];
-//                    for (auto ker_id: com_index[])
+                    match_table.resize(query.vNum+1,-1);
+                    match_table[query.vNum] = query.vNum;
+                    for (auto ker_id: index.com_index[match.first]){
+                        match_table[match.first] = ker_id;
+                        singleKernel_match();
+                    }
 
 
                 } else{

@@ -8,11 +8,18 @@
 #include <queue>
 #include <unordered_set>
 using namespace std;
+
+class Kernel{
+public:
+    unordered_map<int,unordered_set<int>> adj;
+};
+
 class Index{
 public:
     vector<unordered_set<int>> com_index;
     vector<unordered_set<int>> com_index_query;
     vector<multimap<int,int>> miss_index;
+
 public:
     Index(int queryNum,int dataNum);
     void print_miss_index();
@@ -20,11 +27,6 @@ public:
     void print_com_index_query();
 
     void print_all();
-};
-
-class Kernel{
-public:
-    unordered_map<int,unordered_set<int>> adj;
 };
 
 class Graph{
@@ -41,8 +43,8 @@ public:
     map<pair<int,int>,set<pair<int,int>>> edge_count; // <label_a,label_b> -> {(0,1),(2,3) ...}  label_a < label_b
     int max_degree_id=0;
     unordered_set<int> kernel_set;  // only for query
-//    unordered_map<int,vector<int>> kernel;
-    Kernel *kernel;
+    Kernel *kernel; //for query
+//    vector<unordered_set<int>> kernel_nei_unkernel; //only for
 
 public:
     void readGraph(string &path);
