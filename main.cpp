@@ -8,6 +8,7 @@
 
 void print_miss_index(vector<multimap<int, int>> &miss_index);
 void print_com_index(vector<unordered_set<int>> &com_index);
+void print_com_index_query(vector<unordered_set<int>> &com_index_query);
 
 int main() {
 //    string queryPath = "../test/querySet";
@@ -47,9 +48,22 @@ int main() {
     com_index.resize(dataSet->vNum);
     vector<multimap<int,int>> miss_index;
     miss_index.resize(dataSet->vNum);
-    preProsessing(*querySet,*dataSet,com_index,miss_index);
+    vector<unordered_set<int>> com_index_query;
+    com_index_query.resize(querySet->vNum);
+    preProsessing(*querySet,*dataSet,com_index,miss_index,com_index_query);
+
+
+
+    for(auto i : com_index){
+
+    }
+
+
+
+
     print_com_index(com_index);
     print_miss_index(miss_index);
+    print_com_index_query(com_index_query);
 //cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl;
 //    updateIndex(5,0,*querySet,*dataSet,com_index,miss_index);
 //    print_com_index(com_index);
@@ -63,10 +77,12 @@ int main() {
 //    updateIndex(0,6,*querySet,*dataSet,com_index,miss_index);
 //    print_com_index(com_index);
 //    print_miss_index(miss_index);
-    updateIndex(2,3,*querySet,*dataSet,com_index,miss_index);
-    updateIndex(3,2,*querySet,*dataSet,com_index,miss_index);
-    subgraph_Match(2,3,*querySet,*dataSet,com_index);
+    updateIndex(6,13,*querySet,*dataSet,com_index,miss_index);
+    updateIndex(13,6,*querySet,*dataSet,com_index,miss_index);
+    subgraph_Match(6,13,*querySet,*dataSet,com_index);
 
+
+    return 0;
 
 }
 
@@ -92,6 +108,19 @@ void print_miss_index(vector<multimap<int, int>> &miss_index) {
         cout<<n++<<": ";
         for (auto j: i) {
             cout<<j.first<<"->"<<j.second<<" ";
+        }
+        cout<<endl;
+    }
+    cout<<"================"<<endl;
+}
+
+void print_com_index_query(vector<unordered_set<int>> &com_index_query) {
+    cout<<"com_index_query================"<<endl;
+    int n = 0;
+    for (auto i: com_index_query) {
+        cout<<n++<<": ";
+        for (auto j: i) {
+            cout<<j<<" ";
         }
         cout<<endl;
     }

@@ -66,7 +66,7 @@ void preProsessing(const Graph &graph,vector<int> &kernelSet,unordered_map<int,m
 
 void updateIndex(int a, int b ,Graph &query, Graph &data,vector<unordered_set<int>> &com_index,vector<multimap<int,int>> &miss_index);
 
-void preProsessing(Graph &query, Graph &data,vector<unordered_set<int>> &com_index,vector<multimap<int,int>> &miss_index);
+void preProsessing(Graph &query, Graph &data,vector<unordered_set<int>> &com_index,vector<multimap<int,int>> &miss_index,vector<unordered_set<int>> &com_index_query);
 
 bool com_Match(multiset<int> &queryNode,multiset<int> &dataNode);
 int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode);

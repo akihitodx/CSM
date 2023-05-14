@@ -232,7 +232,7 @@ int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode){
     return -1;
 }
 
-void preProsessing(Graph &query, Graph &data,vector<unordered_set<int>> &com_index,vector<multimap<int,int>> &miss_index){
+void preProsessing(Graph &query, Graph &data,vector<unordered_set<int>> &com_index,vector<multimap<int,int>> &miss_index,vector<unordered_set<int>> &com_index_query){
     for (auto data_node:data.node_id) {
         //获取当前数据节点的标签 所对应的查询节点标签的顶点集合 <label,id>
         auto label_set = query.label_set[data.node_label[data_node]];
@@ -240,6 +240,7 @@ void preProsessing(Graph &query, Graph &data,vector<unordered_set<int>> &com_ind
             //对于每一个查询顶点 进行集合比较 如果包含，则将这个数据节点添加进com_index   data_id: query_id...
             if(com_Match(query.neighbor[i],data.neighbor[data_node])){
                 com_index[data_node].insert(i);
+                com_index_query[i].insert(data_node);
                 miss_index[data_node].insert({i,-1});
             }else{
                 //如果不满足包含，进行缺一比较  返回值>=0 则是缺失的标签 -1则不满足缺一
@@ -358,11 +359,11 @@ void updateIndex(int node, int nei ,Graph &query, Graph &data,vector<unordered_s
 
 }
 
-void doubleKernel_match(int main,){
+void doubleKernel_match(int main){
 
 }
 
-void singleKernel_match(){
+void singleKernel_match(int main,vector<int> &match_table){
 
 }
 
@@ -397,21 +398,30 @@ vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &
         }
     }
     for(auto match : should_match){
-        bool f1 = query.kernel_set.find(match.first) != query.kernel_set.end() ? true: false;
-        bool f2 = query.kernel_set.find(match.second) != query.kernel_set.end() ? true: false;
-        if(f1 && f2){
-            //都是核心点
-
-        } else{
-            //只存在一个核心点
-            if(f1){
-                //第一个点是核心点
-                unordered_set<int> maybe_kernel;
+        if(label_a == edge_ab.first){
+            bool f1 = query.kernel_set.find(match.first) != query.kernel_set.end() ? true: false;
+            bool f2 = query.kernel_set.find(match.second) != query.kernel_set.end() ? true: false;
+            if(f1 && f2){
+                //都是核心点
 
             } else{
+                //只存在一个核心点
+                if(f1){
+                    //第一个点是核心点
+                    unordered_map<int,unordered_set<int>> maybe_kernel;
+                    auto nei_query = query.kernel->adj[match.second];  //这些核心顶点的匹配周围必循存在node_b
+                    vector<int> match_table;
+                    match_table.resize(query.vNum,-1);
+                    match_table[match.first];
+//                    for (auto ker_id: com_index[])
 
+
+                } else{
+
+                }
             }
         }
+
     }
 
 
