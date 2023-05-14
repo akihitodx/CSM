@@ -44,7 +44,7 @@ public:
     int max_degree_id=0;
     unordered_set<int> kernel_set;  // only for query
     Kernel *kernel; //for query
-//    vector<unordered_set<int>> kernel_nei_unkernel; //only for
+//    vector<unordered_set<int>> kernel_nei_unkernel;
 
 public:
     void readGraph(string &path);
