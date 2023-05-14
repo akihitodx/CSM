@@ -18,6 +18,8 @@ public:
     void print_miss_index();
     void print_com_index();
     void print_com_index_query();
+
+    void print_all();
 };
 
 class Kernel{
@@ -73,15 +75,12 @@ unordered_set<int> findKernel(const Graph &graph);
  */
 int findMax(const unordered_set<int> &adj,const vector<int> &degree);
 
-void preProsessing(const Graph &graph,vector<int> &kernelSet,unordered_map<int,multiset<int>> &queryNeighbor,unordered_map<int,vector<pair<int,int>>> &index);
+void preProsessing(Graph &query, Graph &data,Index &index);
 
-
-void updateIndex(int a, int b ,Graph &query, Graph &data,vector<unordered_set<int>> &com_index,vector<multimap<int,int>> &miss_index);
-
-void preProsessing(Graph &query, Graph &data,vector<unordered_set<int>> &com_index,vector<multimap<int,int>> &miss_index,vector<unordered_set<int>> &com_index_query);
+void updateIndex(int a, int b ,Graph &query, Graph &data, Index &index);
 
 bool com_Match(multiset<int> &queryNode,multiset<int> &dataNode);
 int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode);
 
-vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, vector<unordered_set<int>> &com_index );
+vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, Index &index );
 #endif //CSM_ALG_H

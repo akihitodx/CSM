@@ -169,16 +169,16 @@ int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode){
     return -1;
 }
 
-void preProsessing(Graph &query, Graph &data,vector<unordered_set<int>> &com_index,vector<multimap<int,int>> &miss_index,vector<unordered_set<int>> &com_index_query){
+void preProsessing(Graph &query, Graph &data,Index &index){
     for (auto data_node:data.node_id) {
         //获取当前数据节点的标签 所对应的查询节点标签的顶点集合 <label,id>
         auto label_set = query.label_set[data.node_label[data_node]];
         for(auto i: label_set){
             //对于每一个查询顶点 进行集合比较 如果包含，则将这个数据节点添加进com_index   data_id: query_id...
             if(com_Match(query.neighbor[i],data.neighbor[data_node])){
-                com_index[data_node].insert(i);
-                com_index_query[i].insert(data_node);
-                miss_index[data_node].insert({i,-1});
+                index.com_index[data_node].insert(i);
+                index.com_index_query[i].insert(data_node);
+                index.miss_index[data_node].insert({i,-1});
             }else{
                 //如果不满足包含，进行缺一比较  返回值>=0 则是缺失的标签 -1则不满足缺一
                 auto tar = miss_Match(query.neighbor[i],data.neighbor[data_node]);
@@ -191,7 +191,7 @@ void preProsessing(Graph &query, Graph &data,vector<unordered_set<int>> &com_ind
 //                    }
                     for(auto j: query.adj[i]){
                         if(query.node_label[j] == tar){
-                            miss_index[data_node].insert({i,j});
+                            index.miss_index[data_node].insert({i,j});
                         }
                     }
                 }
@@ -200,7 +200,7 @@ void preProsessing(Graph &query, Graph &data,vector<unordered_set<int>> &com_ind
     }
 }
 
-void updateIndex(int node, int nei ,Graph &query, Graph &data,vector<unordered_set<int>> &com_index,vector<multimap<int,int>> &miss_index){
+void updateIndex(int node, int nei ,Graph &query, Graph &data, Index &index){
     //邻居表更新
     data.neighbor[node].insert(data.node_label[nei]);
     data.adj[node].insert(nei);
@@ -208,26 +208,27 @@ void updateIndex(int node, int nei ,Graph &query, Graph &data,vector<unordered_s
     auto label_set = query.label_set[data.node_label[node]];
     for(auto i :label_set){
         //完全匹配 无需更新
-        if(com_index[node].size() == 0 || com_index[node].find(i) == com_index[node].end()){ //不是该查询顶点的完全匹配
+        if(index.com_index[node].size() == 0 || index.com_index[node].find(i) == index.com_index[node].end()){ //不是该查询顶点的完全匹配
             //缺一匹配 可能发生变化
-            if(miss_index[node].size() != 0 && miss_index[node].count(i)>0){ //构成缺一匹配 测试是不是构成了新完全匹配
-                auto it = miss_index[node].find(i);
-                for(int count = 0  ; count != miss_index[node].count(i) ;++count,++it){
+            if(index.miss_index[node].size() != 0 && index.miss_index[node].count(i)>0){ //构成缺一匹配 测试是不是构成了新完全匹配
+                auto it = index.miss_index[node].find(i);
+                for(int count = 0  ; count != index.miss_index[node].count(i) ;++count,++it){
                     if(data.node_label[nei] == query.node_label[it->second]){
                         //满足条件 构成完全匹配了
-                        com_index[node].insert(i);
+                        index.com_index[node].insert(i);
+                        index.com_index_query[i].insert(node);
                     }
                 }
                 //删除miss_index[node]中的冗余部分 更新com_index[node]的内容
-                miss_index[node].erase(i);
-                miss_index[node].insert({i,-1});
+                index.miss_index[node].erase(i);
+                index.miss_index[node].insert({i,-1});
 
             }else{ //不构成匹配 尝试进行缺一匹配
                 int vv = miss_Match(query.neighbor[i],data.neighbor[node]);
                 if(vv!= -1){ //构成了缺一匹配
                     for(auto v : query.adj[node]){
                         if (query.node_label[v] == vv){
-                            miss_index[node].insert({i,v});
+                            index.miss_index[node].insert({i,v});
                         }
                     }
                 }

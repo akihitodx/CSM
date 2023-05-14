@@ -41,6 +41,12 @@ void Index::print_com_index_query() {
     cout<<"================"<<endl;
 }
 
+void Index::print_all() {
+    print_com_index();
+    print_com_index_query();
+    print_miss_index();
+}
+
 void Graph::print_kernel(){
     cout<<"kernel_set: ";
     for (auto i: kernel_set) {
