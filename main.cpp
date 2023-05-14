@@ -27,7 +27,7 @@ int main() {
 //
 //    string queryPath = "../test/querySet";
 //a
-    string queryPath = "../test/datasets/human/query_graph/query_dense_8_2.graph";
+    string queryPath = "../test/querySet";
     Graph *querySet = new Graph();
     querySet->readGraph(queryPath);
     querySet->printGraph();
@@ -50,19 +50,22 @@ int main() {
     preProsessing(*querySet,*dataSet,com_index,miss_index);
     print_com_index(com_index);
     print_miss_index(miss_index);
-cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl;
-    updateIndex(5,0,*querySet,*dataSet,com_index,miss_index);
-    print_com_index(com_index);
-    print_miss_index(miss_index);
-    cout<<"!!!!!!!!!"<<endl;
-    updateIndex(0,5,*querySet,*dataSet,com_index,miss_index);
-    print_com_index(com_index);
-    print_miss_index(miss_index);
-    cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl;
-    updateIndex(6,0,*querySet,*dataSet,com_index,miss_index);
-    updateIndex(0,6,*querySet,*dataSet,com_index,miss_index);
-    print_com_index(com_index);
-    print_miss_index(miss_index);
+//cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl;
+//    updateIndex(5,0,*querySet,*dataSet,com_index,miss_index);
+//    print_com_index(com_index);
+//    print_miss_index(miss_index);
+//    cout<<"!!!!!!!!!"<<endl;
+//    updateIndex(0,5,*querySet,*dataSet,com_index,miss_index);
+//    print_com_index(com_index);
+//    print_miss_index(miss_index);
+//    cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl;
+//    updateIndex(6,0,*querySet,*dataSet,com_index,miss_index);
+//    updateIndex(0,6,*querySet,*dataSet,com_index,miss_index);
+//    print_com_index(com_index);
+//    print_miss_index(miss_index);
+    updateIndex(2,3,*querySet,*dataSet,com_index,miss_index);
+    updateIndex(3,2,*querySet,*dataSet,com_index,miss_index);
+    subgraph_Match(2,3,*querySet,*dataSet,com_index);
 
 
 }

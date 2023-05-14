@@ -8,6 +8,11 @@
 #include <queue>
 #include <unordered_set>
 using namespace std;
+class Kernel{
+public:
+    unordered_map<int,unordered_set<int>> adj;
+};
+
 class Graph{
 public:
     int vNum,eNum;
@@ -22,6 +27,8 @@ public:
     map<pair<int,int>,set<pair<int,int>>> edge_count; // <label_a,label_b> -> {(0,1),(2,3) ...}  label_a < label_b
     int max_degree_id=0;
     unordered_set<int> kernel_set;  // only for query
+//    unordered_map<int,vector<int>> kernel;
+    Kernel *kernel;
 
 public:
     void readGraph(string &path);
@@ -64,5 +71,5 @@ void preProsessing(Graph &query, Graph &data,vector<unordered_set<int>> &com_ind
 bool com_Match(multiset<int> &queryNode,multiset<int> &dataNode);
 int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode);
 
-
+vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, vector<unordered_set<int>> &com_index );
 #endif //CSM_ALG_H

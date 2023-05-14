@@ -140,9 +140,28 @@ void Graph::print_kernel(){
         cout<<i<<" ";
     }
     cout<<endl;
+    cout<<"kernel: "<<endl;
+    for(auto i: kernel->adj){
+        cout<<i.first<<": ";
+        for(auto j:i.second){
+            cout<<j<<" ";
+        }
+        cout<<endl;
+    }
 }
 void Graph::set_kernel() {
     this->kernel_set = findKernel(*this);
+    Kernel *kernel = new Kernel();
+    this->kernel = kernel;
+    for(auto id: this->kernel_set){
+        auto nei = this->adj[id];
+        for(auto i:nei){
+            if(kernel_set.find(i)!=kernel_set.end()){
+                kernel->adj[id].insert(i);
+            }
+        }
+    }
+
 }
 
 unordered_set<int> findKernel(const Graph &graph) {
@@ -339,6 +358,14 @@ void updateIndex(int node, int nei ,Graph &query, Graph &data,vector<unordered_s
 
 }
 
+void doubleKernel_match(int main,){
+
+}
+
+void singleKernel_match(){
+
+}
+
 vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, vector<unordered_set<int>> &com_index ){
     vector<vector<int>> res;
     int label_a = data.node_label[node_a];
@@ -370,7 +397,25 @@ vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &
         }
     }
     for(auto match : should_match){
+        bool f1 = query.kernel_set.find(match.first) != query.kernel_set.end() ? true: false;
+        bool f2 = query.kernel_set.find(match.second) != query.kernel_set.end() ? true: false;
+        if(f1 && f2){
+            //都是核心点
 
+        } else{
+            //只存在一个核心点
+            if(f1){
+                //第一个点是核心点
+                unordered_set<int> maybe_kernel;
+
+            } else{
+
+            }
+        }
     }
 
+
+    return res;
+
 }
+
