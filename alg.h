@@ -8,6 +8,18 @@
 #include <queue>
 #include <unordered_set>
 using namespace std;
+class Index{
+public:
+    vector<unordered_set<int>> com_index;
+    vector<unordered_set<int>> com_index_query;
+    vector<multimap<int,int>> miss_index;
+public:
+    Index(int queryNum,int dataNum);
+    void print_miss_index();
+    void print_com_index();
+    void print_com_index_query();
+};
+
 class Kernel{
 public:
     unordered_map<int,unordered_set<int>> adj;

@@ -42,6 +42,7 @@ int main() {
     dataSet->readGraph(dataPath);
     dataSet->printGraph();
 
+    Index *index = new Index(querySet->vNum,dataSet->vNum);
 
 
     vector<unordered_set<int>> com_index;
