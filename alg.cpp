@@ -88,15 +88,33 @@ void Graph::set_adj() {
 
 void Graph::set_kernel() {
     this->kernel_set = findKernel(*this);
-    Kernel *kernel = new Kernel();
-    this->kernel = kernel;
+
     for(auto id: this->kernel_set){
         auto nei = this->adj[id];
         for(auto i:nei){
             if(kernel_set.find(i)!=kernel_set.end()){
-                kernel->adj[id].insert(i);
+                kernel_adj[id].insert(i);
             }
         }
+    }
+
+
+//    Kernel *kernel = new Kernel();
+//    this->kernel = kernel;
+//    for(auto id: this->kernel_set){
+//        auto nei = this->adj[id];
+//        for(auto i:nei){
+//            if(kernel_set.find(i)!=kernel_set.end()){
+//                kernel->adj[id].insert(i);
+//            }
+//        }
+//    }
+    for(auto i : kernel_set){
+        vector adj (this->adj[i].begin(),this->adj[i].end());  //节点的所有邻居
+        sort(adj.begin(),adj.end());
+        vector ker (kernel_set.begin(),kernel_set.end());
+        sort(ker.begin(),ker.end());
+        set_difference(adj.begin(),adj.end(),ker.begin(),ker.end(), back_inserter(this->kernel_nei_unkernel[i]));
     }
 
 }
@@ -241,7 +259,9 @@ void doubleKernel_match(int main){
 
 }
 
-void singleKernel_match(int main,int is_query,vector<int> &match_table,Kernel &kernel, Graph &data, vector<int> &kernel_match,vector<vector<int>> &res, Index &index){
+void singleKernel_match(int main,int is_query,vector<vector<int>> &match_table,Graph &query, Graph &data,vector<vector<int>> &res, Index &index){
+    //is_quert main对应的查询节点
+
 //    if( *(kernel_match.end()-1) ==  0){
 //        if(*(match_table.end()-1) == 0){
 //            res.push_back({match_table.begin(),match_table.end()-1});
@@ -249,16 +269,53 @@ void singleKernel_match(int main,int is_query,vector<int> &match_table,Kernel &k
 //    }
 
 
-    if()
-
-
-    auto kernel_nei = kernel.adj[is_query];
-    for(auto i : kernel_nei){
-        auto com = index.com_index_query[i];
-        for(auto j : com){
+    match_table[is_query].push_back(main); //main插入match_table
+    auto main_nei_unkernel = query.kernel_nei_unkernel[is_query]; //get all unkernel of is_query's neighbor
+    for(auto i :main_nei_unkernel){  // do insert for each unkernel
+        if(match_table[i].size() == 0){
+            for(auto j: index.com_index_query[i]){
+                match_table[i].push_back(j);
+            }
+        }else{
+            auto cur = index.com_index_query[i];
+            vector<int> change;
+            set_intersection(match_table[i].begin(),match_table[i].end(),cur.begin(),cur.end(), back_inserter(change));
+            if(change.size() == 0){
+                //这里需要回溯的逻辑
+                match_table[is_query].pop_back();
+                return ;
+            }
+            match_table[i] = change;
 
         }
+
     }
+
+    auto main_nei_kernel = query.kernel_adj[is_query];
+    for(auto qid: main_nei_kernel){
+        auto qid_cand = index.com_index_query[qid];
+        for(auto cand : qid_cand){
+            singleKernel_match(cand,qid,match_table,query,data,res,index);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+//    auto kernel_nei = kernel.adj[is_query];
+//    for(auto i : kernel_nei){
+//        auto com = index.com_index_query[i];
+//        for(auto j : com){
+//
+//        }
+//    }
 
 }
 
@@ -304,13 +361,13 @@ vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &
                 if(f1){
                     //第一个点是核心点
                     unordered_map<int,unordered_set<int>> maybe_kernel;
-                    auto nei_query = query.kernel->adj[match.second];  //这些核心顶点的匹配周围必循存在node_b
+                    auto nei_query = query.kernel_adj[match.second];  //这些核心顶点的匹配周围必循存在node_b
                     vector<int> match_table;
                     match_table.resize(query.vNum+1,-1);
                     match_table[query.vNum] = query.vNum;
                     for (auto ker_id: index.com_index[match.first]){
                         match_table[match.first] = ker_id;
-                        singleKernel_match();
+//                        singleKernel_match();
                     }
 
 

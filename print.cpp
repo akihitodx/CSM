@@ -53,10 +53,21 @@ void Graph::print_kernel(){
         cout<<i<<" ";
     }
     cout<<endl;
-    cout<<"kernel: "<<endl;
-    for(auto i: kernel->adj){
+    cout<<"kernel_adj: "<<endl;
+    for(auto i: kernel_adj){
         cout<<i.first<<": ";
         for(auto j:i.second){
+            cout<<j<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+void Graph::print_kernel_nei_unkernel(){
+    cout<<"kernel_unkernel_adj: "<<endl;
+    for(auto i : kernel_nei_unkernel){
+        cout<<i.first<<": ";
+        for(auto j: i.second){
             cout<<j<<" ";
         }
         cout<<endl;

@@ -17,7 +17,7 @@ public:
 class Index{
 public:
     vector<unordered_set<int>> com_index;
-    vector<unordered_set<int>> com_index_query;
+    vector<set<int>> com_index_query;
     vector<multimap<int,int>> miss_index;
 
 public:
@@ -43,9 +43,9 @@ public:
     map<pair<int,int>,set<pair<int,int>>> edge_count; // <label_a,label_b> -> {(0,1),(2,3) ...}  label_a < label_b
     int max_degree_id=0;
     unordered_set<int> kernel_set;  // only for query
-    Kernel *kernel; //for query
-//    vector<unordered_set<int>> kernel_nei_unkernel;
-
+//    Kernel *kernel; //for query
+    unordered_map<int,vector<int>> kernel_nei_unkernel; //for query
+    unordered_map<int,unordered_set<int>> kernel_adj; //for query
 public:
     void readGraph(string &path);
     void printGraph();
@@ -55,6 +55,7 @@ public:
     void print_adj();
     void print_edge_count();
     void print_kernel();
+    void print_kernel_nei_unkernel();
     void set_kernel();
 };
 

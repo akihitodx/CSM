@@ -33,6 +33,7 @@ int main() {
 
     querySet->set_kernel();
     querySet->print_kernel();
+    querySet->print_kernel_nei_unkernel();
 
     string dataPath = "../test/dataSet";
     Graph *dataSet = new Graph();
