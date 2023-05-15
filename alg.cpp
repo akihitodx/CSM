@@ -259,8 +259,9 @@ void doubleKernel_match(int main){
 
 }
 
-void singleKernel_match(int main,int is_query,vector<vector<int>> &match_table,Graph &query, Graph &data,vector<vector<int>> &res, Index &index){
+void singleKernel_match(int main,int is_query,vector<vector<int>> &match_table,Graph &query, Graph &data,vector<vector<vector<int>>> &res, Index &index, int count){
     //is_quert main对应的查询节点
+    //count 用于记录经过的核心节点的数量
 
 //    if( *(kernel_match.end()-1) ==  0){
 //        if(*(match_table.end()-1) == 0){
@@ -268,8 +269,11 @@ void singleKernel_match(int main,int is_query,vector<vector<int>> &match_table,G
 //        }
 //    }
 
-
+    if(match_table[is_query].size() != 0){   //核心节点只会经过一次
+        return ;
+    }
     match_table[is_query].push_back(main); //main插入match_table
+    --count;
     auto main_nei_unkernel = query.kernel_nei_unkernel[is_query]; //get all unkernel of is_query's neighbor
     for(auto i :main_nei_unkernel){  // do insert for each unkernel
         if(match_table[i].size() == 0){
@@ -283,6 +287,7 @@ void singleKernel_match(int main,int is_query,vector<vector<int>> &match_table,G
             if(change.size() == 0){
                 //这里需要回溯的逻辑
                 match_table[is_query].pop_back();
+                ++count;
                 return ;
             }
             match_table[i] = change;
@@ -295,11 +300,14 @@ void singleKernel_match(int main,int is_query,vector<vector<int>> &match_table,G
     for(auto qid: main_nei_kernel){
         auto qid_cand = index.com_index_query[qid];
         for(auto cand : qid_cand){
-            singleKernel_match(cand,qid,match_table,query,data,res,index);
+            singleKernel_match(cand,qid,match_table,query,data,res,index, count);
         }
     }
 
+    if(count == 0){
+        res.push_back(match_table);
 
+    }
 
 
 
