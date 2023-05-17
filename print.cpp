@@ -133,3 +133,17 @@ void Graph::printGraph() {
     print_label_set();
     cout<<"==============================printGraph"<<endl;
 }
+
+void Match::print_res() {
+    cout<<"res=================="<<endl;
+    for(auto i: res){
+        for(auto j : i){
+            cout<<"(";
+            for(auto k : j){
+                cout<<k<<" ";
+            }
+            cout<<")";
+        }
+        cout<<endl<<"====================="<<endl;
+    }
+}

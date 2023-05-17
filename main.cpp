@@ -46,6 +46,8 @@ int main() {
 
 
     index->print_all();
+
+
 //cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl;
 //    updateIndex(5,0,*querySet,*dataSet,com_index,miss_index);
 //    print_com_index(com_index);
@@ -65,24 +67,28 @@ int main() {
     updateIndex(2,3,*querySet,*dataSet,*index);
     updateIndex(3,2,*querySet,*dataSet,*index);
     index->print_all();
-    vector<vector<int>> match_table;
-    match_table.resize(querySet->vNum);
-    vector<vector<vector<int>>> res;
-//    res.resize(querySet->vNum);
-    int count = querySet->kernel_set.size();
-    singleKernel_match(3,1,match_table,*querySet,*dataSet,res,*index,count);
+    cout<<"++++++++++++++++"<<endl;
+    Match m1(*querySet);
+    m1.getPath(*querySet,1);
+//    singleKernel_match(3,1,m1,*querySet,*dataSet,*index);
+    m1.print_res();
+    int a;
 
-    cout<<"res=================="<<endl;
-    for(auto i: res){
-        for(auto j : i){
-            cout<<"(";
-            for(auto k : j){
-                cout<<k<<" ";
-            }
-            cout<<")";
-        }
-        cout<<endl<<"====================="<<endl;
-    }
+    cout<<"++++++++++++++++"<<endl;
+    updateIndex(6,13,*querySet,*dataSet,*index);
+    updateIndex(13,6,*querySet,*dataSet,*index);
+    Match m2(*querySet);
+    m2.getPath(*querySet,2);
+    singleKernel_match(6,2,m2,*querySet,*dataSet,*index);
+    m2.print_res();
+
+    cout<<"++++++++++++++++"<<endl;
+    updateIndex(11,12,*querySet,*dataSet,*index);
+    updateIndex(12,11,*querySet,*dataSet,*index);
+    Match m3(*querySet);
+    m2.getPath(*querySet,4);
+    singleKernel_match(11,4,m3,*querySet,*dataSet,*index);
+    m3.print_res();
 
     return 0;
 

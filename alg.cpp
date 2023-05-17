@@ -13,6 +13,33 @@ Index::Index(int queryNum, int dataNum) {
     miss_index.resize(dataNum);
     com_index_query.resize(queryNum);
 }
+Match::Match(Graph &query) {
+    match_table.resize(query.vNum);
+    count = (int)query.kernel_set.size();
+
+}
+
+void Match::getPath(Graph &query, int a) {
+    kernel_path.resize(1);
+    auto kernel = query.kernel_set;
+    queue<int> q;
+    q.push(a);
+    while(!q.empty()){
+        int temp = q.front();
+        q.pop();
+        this->kernel_path[0].push_back(temp);
+        kernel.erase(temp);
+        for(auto i: query.kernel_adj[temp]){
+            if(kernel.find(i)!=kernel.end()){
+                q.push(i);
+            }
+        }
+    }
+}
+
+void Match::getPath(Graph &query, int a, int b) {
+
+}
 
 void Graph::readGraph(string &path) {
     ifstream ifs;
@@ -259,7 +286,7 @@ void doubleKernel_match(int main){
 
 }
 
-void singleKernel_match(int main, int is_query, vector<vector<int>> &match_table, Graph &query, Graph &data, vector<vector<vector<int>>> &res, Index &index, int &count){
+void singleKernel_match(int main, int is_query, Match &match, Graph &query, Graph &data, Index &index){
     //is_quert main对应的查询节点
     //count 用于记录经过的核心节点的数量
 
@@ -269,17 +296,17 @@ void singleKernel_match(int main, int is_query, vector<vector<int>> &match_table
 //        }
 //    }
 
-    if(!match_table[is_query].empty()){   //核心节点只会经过一次 //好像不需要
+    if(!match.match_table[is_query].empty()){   //核心节点只会经过一次 //好像不需要
         return ;
     }
-    if(count == 0){
+    if(match.count == 0){
 
 //        ++count;
         return;
     }
 
-    match_table[is_query].push_back(main); //main插入match_table
-    --count;
+    match.match_table[is_query].push_back(main); //main插入match_table
+    --match.count;
     auto main_nei_unkernel = query.kernel_nei_unkernel[is_query]; //get all unkernel of is_query's neighbor
     for(auto i :main_nei_unkernel){  // do insert for each unkernel
         vector<int> unkernel_cand;
@@ -289,36 +316,55 @@ void singleKernel_match(int main, int is_query, vector<vector<int>> &match_table
             }
         }
         sort(unkernel_cand.begin(),unkernel_cand.end());
-        if(match_table[i].empty()){
-            match_table[i] = unkernel_cand;
+        if(match.match_table[i].empty()){
+            match.match_table[i] = unkernel_cand;
         }else{
             vector<int> change;
-            set_intersection(match_table[i].begin(),match_table[i].end(),unkernel_cand.begin(),unkernel_cand.end(), back_inserter(change));
+            set_intersection(match.match_table[i].begin(),match.match_table[i].end(),unkernel_cand.begin(),unkernel_cand.end(), back_inserter(change));
             if(change.empty()){
                 //这里需要回溯的逻辑
-                match_table[is_query].pop_back();
-                ++count;
+                match.match_table[is_query].pop_back();
+                ++match.count;
                 return ;
             }
-            match_table[i] = change;
+            match.match_table[i] = change;
 
         }
-
     }
 
-    auto main_nei_kernel = query.kernel_adj[is_query];
-    for(auto qid: main_nei_kernel){
-        auto qid_cand = index.com_index_query[qid];
-        if(count != 0){
-            for(auto cand : qid_cand){
-                singleKernel_match(cand,qid,match_table,query,data,res,index, count);
+//    auto main_nei_kernel = query.kernel_adj[is_query];
+//    for(auto qid: main_nei_kernel){
+//        auto qid_cand = index.com_index_query[qid];
+//        if(count != 0){
+//            for(auto cand : qid_cand){
+//                match_table[qid].push_back(cand);
+//                singleKernel_match(cand,qid,match_table,query,data,res,index, --count);
+//
+//                match_table[qid].pop_back();
+//            }
+//        } else{
+//            res.push_back(match_table);
+//            ++count;
+//        }
+//
+//    }
+
+    vector<int> main_nei_kernel(query.kernel_adj[is_query].begin(),query.kernel_adj[is_query].end());
+    vector<vector<int>> kernel_cand_set;
+    for(auto i: main_nei_kernel){
+        vector<int> kernel_cand;
+        for(auto n : data.adj[main]){
+            if(index.com_index[n].find(i) != index.com_index[n].end()){
+                kernel_cand.push_back(n);
             }
-        } else{
-            res.push_back(match_table);
-            ++count;
         }
-
+        sort(kernel_cand.begin(),kernel_cand.end());
+        kernel_cand_set[i] = kernel_cand;
     }
+//    for()
+
+
+
 
 
 

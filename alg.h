@@ -14,6 +14,7 @@ public:
     unordered_map<int,unordered_set<int>> adj;
 };
 
+
 class Index{
 public:
     vector<unordered_set<int>> com_index;
@@ -59,6 +60,21 @@ public:
     void set_kernel();
 };
 
+class Match{
+public:
+    vector<vector<int>> match_table;
+    vector<vector<vector<int>>> res;
+    int count;
+    vector<vector<int>> kernel_path;
+public:
+    Match(Graph &query);
+
+    //深搜还是广搜呢？
+    void getPath(Graph &query,int a);
+    void getPath(Graph &query,int a,int b);
+    void print_res();
+
+};
 
 
 /**
@@ -87,5 +103,5 @@ int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode);
 
 vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, Index &index );
 
-void singleKernel_match(int main, int is_query, vector<vector<int>> &match_table, Graph &query, Graph &data, vector<vector<vector<int>>> &res, Index &index, int &count);
+void singleKernel_match(int main, int is_query, Match &match, Graph &query, Graph &data, Index &index);
 #endif //CSM_ALG_H
