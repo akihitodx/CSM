@@ -226,9 +226,9 @@ void updateIndex(int node, int nei ,Graph &query, Graph &data, Index &index){
     auto label_set = query.label_set[data.node_label[node]];
     for(auto i :label_set){
         //完全匹配 无需更新
-        if(index.com_index[node].size() == 0 || index.com_index[node].find(i) == index.com_index[node].end()){ //不是该查询顶点的完全匹配
+        if(index.com_index[node].empty() || index.com_index[node].find(i) == index.com_index[node].end()){ //不是该查询顶点的完全匹配
             //缺一匹配 可能发生变化
-            if(index.miss_index[node].size() != 0 && index.miss_index[node].count(i)>0){ //构成缺一匹配 测试是不是构成了新完全匹配
+            if(!index.miss_index[node].empty() && index.miss_index[node].count(i)>0){ //构成缺一匹配 测试是不是构成了新完全匹配
                 auto it = index.miss_index[node].find(i);
                 for(int count = 0  ; count != index.miss_index[node].count(i) ;++count,++it){
                     if(data.node_label[nei] == query.node_label[it->second]){
@@ -259,7 +259,7 @@ void doubleKernel_match(int main){
 
 }
 
-void singleKernel_match(int main,int is_query,vector<vector<int>> &match_table,Graph &query, Graph &data,vector<vector<vector<int>>> &res, Index &index, int count){
+void singleKernel_match(int main, int is_query, vector<vector<int>> &match_table, Graph &query, Graph &data, vector<vector<vector<int>>> &res, Index &index, int &count){
     //is_quert main对应的查询节点
     //count 用于记录经过的核心节点的数量
 
@@ -269,22 +269,32 @@ void singleKernel_match(int main,int is_query,vector<vector<int>> &match_table,G
 //        }
 //    }
 
-    if(match_table[is_query].size() != 0){   //核心节点只会经过一次
+    if(!match_table[is_query].empty()){   //核心节点只会经过一次 //好像不需要
         return ;
     }
+    if(count == 0){
+
+//        ++count;
+        return;
+    }
+
     match_table[is_query].push_back(main); //main插入match_table
     --count;
     auto main_nei_unkernel = query.kernel_nei_unkernel[is_query]; //get all unkernel of is_query's neighbor
     for(auto i :main_nei_unkernel){  // do insert for each unkernel
-        if(match_table[i].size() == 0){
-            for(auto j: index.com_index_query[i]){
-                match_table[i].push_back(j);
+        vector<int> unkernel_cand;
+        for(auto n : data.adj[main]){
+            if(index.com_index[n].find(i) != index.com_index[n].end()){
+                unkernel_cand.push_back(n);
             }
+        }
+        sort(unkernel_cand.begin(),unkernel_cand.end());
+        if(match_table[i].empty()){
+            match_table[i] = unkernel_cand;
         }else{
-            auto cur = index.com_index_query[i];
             vector<int> change;
-            set_intersection(match_table[i].begin(),match_table[i].end(),cur.begin(),cur.end(), back_inserter(change));
-            if(change.size() == 0){
+            set_intersection(match_table[i].begin(),match_table[i].end(),unkernel_cand.begin(),unkernel_cand.end(), back_inserter(change));
+            if(change.empty()){
                 //这里需要回溯的逻辑
                 match_table[is_query].pop_back();
                 ++count;
@@ -299,15 +309,18 @@ void singleKernel_match(int main,int is_query,vector<vector<int>> &match_table,G
     auto main_nei_kernel = query.kernel_adj[is_query];
     for(auto qid: main_nei_kernel){
         auto qid_cand = index.com_index_query[qid];
-        for(auto cand : qid_cand){
-            singleKernel_match(cand,qid,match_table,query,data,res,index, count);
+        if(count != 0){
+            for(auto cand : qid_cand){
+                singleKernel_match(cand,qid,match_table,query,data,res,index, count);
+            }
+        } else{
+            res.push_back(match_table);
+            ++count;
         }
-    }
-
-    if(count == 0){
-        res.push_back(match_table);
 
     }
+
+
 
 
 

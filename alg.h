@@ -17,7 +17,7 @@ public:
 class Index{
 public:
     vector<unordered_set<int>> com_index;
-    vector<set<int>> com_index_query;
+    vector<unordered_set<int>> com_index_query;
     vector<multimap<int,int>> miss_index;
 
 public:
@@ -86,4 +86,6 @@ bool com_Match(multiset<int> &queryNode,multiset<int> &dataNode);
 int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode);
 
 vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, Index &index );
+
+void singleKernel_match(int main, int is_query, vector<vector<int>> &match_table, Graph &query, Graph &data, vector<vector<vector<int>>> &res, Index &index, int &count);
 #endif //CSM_ALG_H

@@ -65,7 +65,24 @@ int main() {
     updateIndex(2,3,*querySet,*dataSet,*index);
     updateIndex(3,2,*querySet,*dataSet,*index);
     index->print_all();
+    vector<vector<int>> match_table;
+    match_table.resize(querySet->vNum);
+    vector<vector<vector<int>>> res;
+//    res.resize(querySet->vNum);
+    int count = querySet->kernel_set.size();
+    singleKernel_match(3,1,match_table,*querySet,*dataSet,res,*index,count);
 
+    cout<<"res=================="<<endl;
+    for(auto i: res){
+        for(auto j : i){
+            cout<<"(";
+            for(auto k : j){
+                cout<<k<<" ";
+            }
+            cout<<")";
+        }
+        cout<<endl<<"====================="<<endl;
+    }
 
     return 0;
 
