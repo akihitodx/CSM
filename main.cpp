@@ -89,7 +89,7 @@ int main() {
     updateIndex(12,11,*querySet,*dataSet,*index);
     Match m3(*querySet);
     m2.getPath(*querySet,4);
-    singleKernel_match(11,4,m3,*querySet,*dataSet,*index);
+//    singleKernel_match(11,4,m3,*querySet,*dataSet,*index);
     m3.print_res();
 
     return 0;

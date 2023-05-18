@@ -40,7 +40,7 @@ public:
     vector<int> node_degree;
     unordered_map<int,multiset<int>> neighbor;        //node_id: nei_node01_label...
     unordered_map<int,unordered_set<int>> label_set;  //label: node_id ...
-    vector<unordered_set<int>> adj;
+    vector<set<int>> adj;
     map<pair<int,int>,set<pair<int,int>>> edge_count; // <label_a,label_b> -> {(0,1),(2,3) ...}  label_a < label_b
     int max_degree_id=0;
     unordered_set<int> kernel_set;  // only for query

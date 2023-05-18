@@ -138,7 +138,7 @@ void Graph::set_adj() {
     adj.resize(vNum);
     int begin = 0;
     for(int i = 0;i<vNum;++i){
-        adj[i] = unordered_set(adj_find.begin()+begin,adj_find.begin()+begin+node_degree[i]);
+        adj[i] = set(adj_find.begin()+begin,adj_find.begin()+begin+node_degree[i]);
         begin = begin +node_degree[i];
     }
 }
@@ -391,19 +391,6 @@ void singleKernel_match(int main, int is_query, Match &match, Graph &query, Grap
         sort(kernel_cand.begin(),kernel_cand.end());
         kernel_cand_set[i] = kernel_cand;
     }
-//    for()
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //    auto kernel_nei = kernel.adj[is_query];
@@ -418,84 +405,124 @@ void singleKernel_match(int main, int is_query, Match &match, Graph &query, Grap
 
 
 
-void singleKernel_match(int main, Match &match, Graph &query, Graph &data, Index &index){
-    if(match.count == match.kernel_path.size()){
-        match.res.push_back(match.match_table);
-        return;
-    }
+void singleKernel_match(int main, Match &match, Graph &query, Graph &data, Index &index) {
+//    if (match.count == match.kernel_path.size()+1) {
+//        match.res.push_back(match.match_table);
+//        return;
+//    }
     int is_query = match.kernel_path[match.count].first;
-    auto next = match.kernel_path[match.count].second;
+    int next = match.kernel_path[match.count].second;
 
-    for(auto mid : match.match_table[is_query]){
-        for(auto i: data.adj[mid]){
-            if(index.com_index[i].find(next)==index.com_index[i].end()){
+    vector<int> unkernel_change;
+    vector<vector<int>> before_change;
+    auto main_nei_unkernel = query.kernel_nei_unkernel[is_query]; //get all unkernel of is_query's neighbor
+    for (auto i: main_nei_unkernel) {  // do insert for each unkernel
+        vector<int> unkernel_cand;
+        for (auto n: data.adj[main]) {
+            if (index.com_index[n].find(i) != index.com_index[n].end()) {
+                unkernel_cand.push_back(n);
+            }
+        }
+//        sort(unkernel_cand.begin(),unkernel_cand.end());
+        if (match.match_table[i].empty()) {
+            match.match_table[i] = unkernel_cand;
+        } else {
+            vector<int> change;
+            set_intersection(match.match_table[i].begin(), match.match_table[i].end(), unkernel_cand.begin(),
+                             unkernel_cand.end(), back_inserter(change));
+            if (change.empty()) {
+                //这里需要回溯的逻辑
+                return;
+            }
+            before_change.push_back(match.match_table[i]);
+            match.match_table[i] = {change.begin(), change.end()};
+            unkernel_change.push_back(i);
+        }
+    }
+
+    for (auto mid: match.match_table[is_query]) {  //还是有问题
+//        if(match.count==0){
+//            ++match.count;
+//            match.match_table[]
+//        }
+        for (auto i: data.adj[mid]) {
+            if (index.com_index[i].find(next) == index.com_index[i].end()) {
                 continue;
             }
-            ++match.count;
-            match.match_table[next].push_back(i);
-            singleKernel_match(i,match,query,data,index);
+            if(match.count != match.kernel_path.size()){
+                ++match.count;
+                match.match_table[next].push_back(i);
+                singleKernel_match(i, match, query, data, index);
+
+            }else{
+                match.res.push_back(match.match_table);
+                return;
+            }
             --match.count;
             match.match_table[next].pop_back();
+            for(int j = 0;j<unkernel_change.size();++j){
+                match.match_table[unkernel_change[j]] = {before_change[j].begin(),before_change[j].end()};
+            }
+
+
         }
     }
 }
 
 
-
-
-vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, Index &index ){
+vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, Index &index) {
     vector<vector<int>> res;
     int label_a = data.node_label[node_a];
     int label_b = data.node_label[node_b];
-    pair<int,int> edge_ab;
-    int a,b;
-    if(label_a<label_b){
-        edge_ab = {label_a,label_b};
+    pair<int, int> edge_ab;
+    int a, b;
+    if (label_a < label_b) {
+        edge_ab = {label_a, label_b};
         a = 0;
         b = 1;
-    }else{
-        edge_ab = {label_b,label_a};
+    } else {
+        edge_ab = {label_b, label_a};
         a = 1;
         b = 0;
     }
     auto edge_match = query.edge_count[edge_ab];
     auto com_a = index.com_index[node_a];
     auto com_b = index.com_index[node_b];
-    vector<pair<int,int>> should_match;
+    vector<pair<int, int>> should_match;
     for (auto i: edge_match) {
-        if(label_a == edge_ab.first){
-            if(com_a.find(i.first) != com_a.end()  && com_b.find(i.second) != com_b.end()  ){
+        if (label_a == edge_ab.first) {
+            if (com_a.find(i.first) != com_a.end() && com_b.find(i.second) != com_b.end()) {
                 should_match.emplace_back(i);
             }
-        }else{
-            if(com_a.find(i.second) != com_a.end()  && com_b.find(i.first) != com_b.end()  ){
+        } else {
+            if (com_a.find(i.second) != com_a.end() && com_b.find(i.first) != com_b.end()) {
                 should_match.emplace_back(i);
             }
         }
     }
-    for(auto match : should_match){
-        if(label_a == edge_ab.first){
-            bool f1 = query.kernel_set.find(match.first) != query.kernel_set.end() ? true: false;
-            bool f2 = query.kernel_set.find(match.second) != query.kernel_set.end() ? true: false;
-            if(f1 && f2){
+    for (auto match: should_match) {
+        if (label_a == edge_ab.first) {
+            bool f1 = query.kernel_set.find(match.first) != query.kernel_set.end() ? true : false;
+            bool f2 = query.kernel_set.find(match.second) != query.kernel_set.end() ? true : false;
+            if (f1 && f2) {
                 //都是核心点
 
-            } else{
+            } else {
                 //只存在一个核心点
-                if(f1){
+                if (f1) {
                     //第一个点是核心点
-                    unordered_map<int,unordered_set<int>> maybe_kernel;
+                    unordered_map<int, unordered_set<int>> maybe_kernel;
                     auto nei_query = query.kernel_adj[match.second];  //这些核心顶点的匹配周围必循存在node_b
                     vector<int> match_table;
-                    match_table.resize(query.vNum+1,-1);
+                    match_table.resize(query.vNum + 1, -1);
                     match_table[query.vNum] = query.vNum;
-                    for (auto ker_id: index.com_index[match.first]){
+                    for (auto ker_id: index.com_index[match.first]) {
                         match_table[match.first] = ker_id;
 //                        singleKernel_match();
                     }
 
 
-                } else{
+                } else {
 
                 }
             }
