@@ -15,26 +15,34 @@ Index::Index(int queryNum, int dataNum) {
 }
 Match::Match(Graph &query) {
     match_table.resize(query.vNum);
-    count = (int)query.kernel_set.size();
+    count = 0;
 
 }
 
 void Match::getPath(Graph &query, int a) {
-    kernel_path.resize(1);
-    auto kernel = query.kernel_set;
-    queue<int> q;
-    q.push(a);
-    while(!q.empty()){
-        int temp = q.front();
-        q.pop();
-        this->kernel_path[0].push_back(temp);
-        kernel.erase(temp);
-        for(auto i: query.kernel_adj[temp]){
-            if(kernel.find(i)!=kernel.end()){
-                q.push(i);
+    queue<int> qqq;
+    queue<int> fff;
+    unordered_set<int> over;
+    over.insert(a);
+    for(auto i : query.kernel_adj[a]){
+        qqq.push(i);
+        fff.push(a);
+    }
+    while(!qqq.empty()){
+        auto temp = qqq.front();
+        qqq.pop();
+        over.insert(temp);
+        auto f = fff.front();
+        fff.pop();
+        kernel_path.emplace_back(f,temp);
+        for(auto i : query.kernel_adj[temp]){
+            if(over.find(i)==over.end()){
+                qqq.push(i);
+                fff.push(temp);
             }
         }
     }
+
 }
 
 void Match::getPath(Graph &query, int a, int b) {
@@ -286,7 +294,7 @@ void doubleKernel_match(int main){
 
 }
 
-void singleKernel_match(int main, int is_query, Match &match, Graph &query, Graph &data, Index &index){
+void singleKernel_match(int main, int is_query, Match &match, Graph &query, Graph &data, Index &index,int &loc){
     //is_quert main对应的查询节点
     //count 用于记录经过的核心节点的数量
 
@@ -385,6 +393,53 @@ void singleKernel_match(int main, int is_query, Match &match, Graph &query, Grap
 //    }
 
 }
+
+void singleKernel_match(int main, int is_query, Match &match, Graph &query, Graph &data, Index &index){
+    if(match.count == match.kernel_path.size()){
+        match.res.push_back(match.match_table);
+        return;
+    }
+
+    match.match_table[is_query].push_back(main); //main插入match_table
+    auto next = match.kernel_path[match.count];
+    for(auto i: data.adj[main]){
+        if(index.com_index[i].find(next.second) == index.com_index[i].end() ){
+            continue;
+        }
+        ++match.count;
+
+        singleKernel_match(i,next.second,match,query,data,index);
+
+        --match.count;
+        match.match_table[is_query].pop_back();
+    }
+
+}
+
+void singleKernel_match(int main, Match &match, Graph &query, Graph &data, Index &index){
+    if(match.count == match.kernel_path.size()){
+        match.res.push_back(match.match_table);
+        return;
+    }
+    int is_query = match.kernel_path[match.count].first;
+    auto next = match.kernel_path[match.count].second;
+
+    for(auto mid : match.match_table[is_query]){
+        for(auto i: data.adj[mid]){
+            if(index.com_index[i].find(next)==index.com_index[i].end()){
+                continue;
+            }
+            ++match.count;
+            match.match_table[next].push_back(i);
+            singleKernel_match(i,match,query,data,index);
+            --match.count;
+            match.match_table[next].pop_back();
+        }
+    }
+}
+
+
+
 
 vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, Index &index ){
     vector<vector<int>> res;

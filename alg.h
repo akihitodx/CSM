@@ -65,7 +65,7 @@ public:
     vector<vector<int>> match_table;
     vector<vector<vector<int>>> res;
     int count;
-    vector<vector<int>> kernel_path;
+    vector<pair<int,int>> kernel_path;
 public:
     Match(Graph &query);
 
@@ -104,4 +104,13 @@ int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode);
 vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, Index &index );
 
 void singleKernel_match(int main, int is_query, Match &match, Graph &query, Graph &data, Index &index);
+
+
+void singleKernel_match(int is_query, Match &match, Graph &query, Graph &data, Index &index);
+
+
+
 #endif //CSM_ALG_H
+
+
+

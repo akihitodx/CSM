@@ -79,7 +79,9 @@ int main() {
     updateIndex(13,6,*querySet,*dataSet,*index);
     Match m2(*querySet);
     m2.getPath(*querySet,2);
-    singleKernel_match(6,2,m2,*querySet,*dataSet,*index);
+    m2.match_table[2].push_back(6);
+//    singleKernel_match(6,2,m2,*querySet,*dataSet,*index);
+    singleKernel_match(6,m2,*querySet,*dataSet,*index);
     m2.print_res();
 
     cout<<"++++++++++++++++"<<endl;
