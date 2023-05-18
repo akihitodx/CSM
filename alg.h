@@ -103,9 +103,6 @@ int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode);
 
 vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, Index &index );
 
-void singleKernel_match(int main, int is_query, Match &match, Graph &query, Graph &data, Index &index);
-
-
 void singleKernel_match(int is_query, Match &match, Graph &query, Graph &data, Index &index);
 
 

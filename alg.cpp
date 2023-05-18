@@ -416,27 +416,7 @@ void singleKernel_match(int main, int is_query, Match &match, Graph &query, Grap
 
 }
 
-void singleKernel_match(int main, int is_query, Match &match, Graph &query, Graph &data, Index &index){
-    if(match.count == match.kernel_path.size()){
-        match.res.push_back(match.match_table);
-        return;
-    }
 
-    match.match_table[is_query].push_back(main); //main插入match_table
-    auto next = match.kernel_path[match.count];
-    for(auto i: data.adj[main]){
-        if(index.com_index[i].find(next.second) == index.com_index[i].end() ){
-            continue;
-        }
-        ++match.count;
-
-        singleKernel_match(i,next.second,match,query,data,index);
-
-        --match.count;
-        match.match_table[is_query].pop_back();
-    }
-
-}
 
 void singleKernel_match(int main, Match &match, Graph &query, Graph &data, Index &index){
     if(match.count == match.kernel_path.size()){
