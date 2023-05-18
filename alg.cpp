@@ -46,7 +46,29 @@ void Match::getPath(Graph &query, int a) {
 }
 
 void Match::getPath(Graph &query, int a, int b) {
-
+    queue<int> qqq;
+    queue<int> fff;
+    unordered_set<int> over;
+    over.insert(a);
+    for(auto i : query.kernel_adj[a]){
+        qqq.push(i);
+        fff.push(a);
+    }
+    while(!qqq.empty()){
+        auto temp = qqq.front();
+        qqq.pop();
+        over.insert(temp);
+        auto f = fff.front();
+        fff.pop();
+        kernel_path.emplace_back(f,temp);
+        for(auto i : query.kernel_adj[temp]){
+            if(over.find(i)==over.end()){
+                qqq.push(i);
+                fff.push(temp);
+            }
+        }
+    }
+    kernel_path.erase(remove(kernel_path.begin(),kernel_path.end(), make_pair(a,b)),kernel_path.end());
 }
 
 void Graph::readGraph(string &path) {
