@@ -70,27 +70,36 @@ int main() {
     cout<<"++++++++++++++++"<<endl;
     Match m1(*querySet);
     m1.getPath(*querySet,1);
-//    singleKernel_match(3,1,m1,*querySet,*dataSet,*index);
+    m1.getUnkernel_path(*querySet,1);
+    m1.match_table[1].push_back(3);
+    get_All_kernel(3,m1,*querySet,*dataSet,*index);
     m1.print_res();
-    int a;
+    get_All_unkernel(m1,*querySet,*dataSet,*index);
+    m1.print_res_second();
 
     cout<<"++++++++++++++++"<<endl;
     updateIndex(6,13,*querySet,*dataSet,*index);
     updateIndex(13,6,*querySet,*dataSet,*index);
     Match m2(*querySet);
     m2.getPath(*querySet,2);
+    m2.getUnkernel_path(*querySet,2);
     m2.match_table[2].push_back(6);
-//    singleKernel_match(6,2,m2,*querySet,*dataSet,*index);
-    singleKernel_match(6,m2,*querySet,*dataSet,*index);
+    get_All_kernel(6,m2,*querySet,*dataSet,*index);
     m2.print_res();
+    get_All_unkernel(m2,*querySet,*dataSet,*index);
+    m2.print_res_second();
 
     cout<<"++++++++++++++++"<<endl;
     updateIndex(11,12,*querySet,*dataSet,*index);
     updateIndex(12,11,*querySet,*dataSet,*index);
     Match m3(*querySet);
-    m2.getPath(*querySet,4);
-//    singleKernel_match(11,4,m3,*querySet,*dataSet,*index);
+    m3.getPath(*querySet,4);
+    m3.getUnkernel_path(*querySet,4);
+    m3.match_table[4].push_back(11);
+    get_All_kernel(11,m3,*querySet,*dataSet,*index);
     m3.print_res();
+    get_All_unkernel(m3,*querySet,*dataSet,*index);
+    m3.print_res_second();
 
     return 0;
 

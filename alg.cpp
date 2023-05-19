@@ -70,6 +70,44 @@ void Match::getPath(Graph &query, int a, int b) {
     }
     kernel_path.erase(remove(kernel_path.begin(),kernel_path.end(), make_pair(a,b)),kernel_path.end());
 }
+void Match::getUnkernel_path(Graph &query, int a){
+    queue<int> q;
+    unordered_set<int> ss = query.kernel_set;
+    q.push(a);
+    ss.erase(a);
+    while(!q.empty()){
+        int temp = q.front();
+        q.pop();
+        unkernel_path.push_back(temp);
+        for(auto i: query.kernel_adj[temp]){
+            if(ss.find(i) != ss.end()){
+                q.push(i);
+                ss.erase(i);
+            }
+
+        }
+    }
+}
+
+void Match::getUnkernel_path(Graph &query, int a,int b){
+    queue<int> q;
+    unordered_set<int> ss = query.kernel_set;
+    q.push(a);
+    q.push(b);
+    ss.erase(a);
+    ss.erase(b);
+    while(!q.empty()){
+        int temp = q.front();
+        q.pop();
+        unkernel_path.push_back(temp);
+        for(auto i: query.kernel_adj[temp]){
+            if(ss.find(i) != ss.end()){
+                q.push(i);
+                ss.erase(i);
+            }
+        }
+    }
+}
 
 void Graph::readGraph(string &path) {
     ifstream ifs;
@@ -405,66 +443,63 @@ void singleKernel_match(int main, int is_query, Match &match, Graph &query, Grap
 
 
 
-void singleKernel_match(int main, Match &match, Graph &query, Graph &data, Index &index) {
-//    if (match.count == match.kernel_path.size()+1) {
-//        match.res.push_back(match.match_table);
-//        return;
-//    }
+void get_All_kernel(int main, Match &match, Graph &query, Graph &data, Index &index) {
+    if (match.count == match.kernel_path.size()) {
+        match.res.push_back(match.match_table);
+        return;
+    }
+
     int is_query = match.kernel_path[match.count].first;
     int next = match.kernel_path[match.count].second;
 
-    vector<int> unkernel_change;
-    vector<vector<int>> before_change;
-    auto main_nei_unkernel = query.kernel_nei_unkernel[is_query]; //get all unkernel of is_query's neighbor
-    for (auto i: main_nei_unkernel) {  // do insert for each unkernel
-        vector<int> unkernel_cand;
-        for (auto n: data.adj[main]) {
-            if (index.com_index[n].find(i) != index.com_index[n].end()) {
-                unkernel_cand.push_back(n);
-            }
-        }
-//        sort(unkernel_cand.begin(),unkernel_cand.end());
-        if (match.match_table[i].empty()) {
-            match.match_table[i] = unkernel_cand;
-        } else {
-            vector<int> change;
-            set_intersection(match.match_table[i].begin(), match.match_table[i].end(), unkernel_cand.begin(),
-                             unkernel_cand.end(), back_inserter(change));
-            if (change.empty()) {
-                //这里需要回溯的逻辑
-                return;
-            }
-            before_change.push_back(match.match_table[i]);
-            match.match_table[i] = {change.begin(), change.end()};
-            unkernel_change.push_back(i);
-        }
-    }
-
     for (auto mid: match.match_table[is_query]) {  //还是有问题
-//        if(match.count==0){
-//            ++match.count;
-//            match.match_table[]
-//        }
         for (auto i: data.adj[mid]) {
             if (index.com_index[i].find(next) == index.com_index[i].end()) {
                 continue;
             }
-            if(match.count != match.kernel_path.size()){
-                ++match.count;
-                match.match_table[next].push_back(i);
-                singleKernel_match(i, match, query, data, index);
-
-            }else{
-                match.res.push_back(match.match_table);
-                return;
-            }
+            ++match.count;
+            match.match_table[next].push_back(i);
+            get_All_kernel(i, match, query, data, index);
             --match.count;
             match.match_table[next].pop_back();
-            for(int j = 0;j<unkernel_change.size();++j){
-                match.match_table[unkernel_change[j]] = {before_change[j].begin(),before_change[j].end()};
+        }
+    }
+}
+
+void get_All_unkernel(Match &match,Graph &query,Graph &data,Index &index){
+    bool flag= true;
+    for(auto path:match.res){
+
+        for(auto is_query: match.unkernel_path){
+            if(!flag) break;
+            auto main = path[is_query][0];
+            auto main_nei_unkernel = query.kernel_nei_unkernel[is_query];
+            for (auto i: main_nei_unkernel) {  // do insert for each unkernel
+                if(!flag) break;
+                vector<int> unkernel_cand;
+                for (auto n: data.adj[main]) {
+                    if (index.com_index[n].find(i) != index.com_index[n].end()) {
+                        unkernel_cand.push_back(n);
+                    }
+                }
+                if (path[i].empty()) {
+                    path[i] = unkernel_cand;
+                } else {
+                    vector<int> change;
+                    set_intersection(path[i].begin(), path[i].end(), unkernel_cand.begin(),
+                                     unkernel_cand.end(), back_inserter(change));
+                    if (change.empty()) {
+                        flag = false;
+                    } else{
+                        path[i] = {change.begin(),change.end()};
+                    }
+                }
             }
-
-
+        }
+        if(flag){
+            match.res_second.push_back(path);
+        } else{
+            flag = true;
         }
     }
 }

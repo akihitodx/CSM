@@ -64,15 +64,21 @@ class Match{
 public:
     vector<vector<int>> match_table;
     vector<vector<vector<int>>> res;
+    vector<vector<vector<int>>> res_second;
     int count;
     vector<pair<int,int>> kernel_path;
+    vector<int> unkernel_path;
 public:
     Match(Graph &query);
 
     //深搜还是广搜呢？
     void getPath(Graph &query,int a);
     void getPath(Graph &query,int a,int b);
+
+    void getUnkernel_path(Graph &query, int a);
+    void getUnkernel_path(Graph &query,int a, int b);
     void print_res();
+    void print_res_second();
 
 };
 
@@ -103,9 +109,9 @@ int miss_Match(multiset<int> &queryNode,multiset<int> &dataNode);
 
 vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &data, Index &index );
 
-void singleKernel_match(int is_query, Match &match, Graph &query, Graph &data, Index &index);
+void get_All_kernel(int is_query, Match &match, Graph &query, Graph &data, Index &index);
 
-
+void get_All_unkernel(Match &match,Graph &query,Graph &data,Index &index);
 
 #endif //CSM_ALG_H
 

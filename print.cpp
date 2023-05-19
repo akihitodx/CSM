@@ -147,3 +147,16 @@ void Match::print_res() {
         cout<<endl<<"====================="<<endl;
     }
 }
+void Match::print_res_second(){
+    cout<<"res=================="<<endl;
+    for(auto i: res_second){
+        for(auto j : i){
+            cout<<"(";
+            for(auto k : j){
+                cout<<k<<" ";
+            }
+            cout<<")";
+        }
+        cout<<endl<<"====================="<<endl;
+    }
+}
