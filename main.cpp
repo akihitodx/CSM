@@ -46,11 +46,28 @@ int main() {
 
 
     index->print_all();
-
+    vector<vector<int>> res;
 
     updateIndex(2,3,*querySet,*dataSet,*index);
     updateIndex(3,2,*querySet,*dataSet,*index);
-    index->print_all();
+    res = subgraph_Match(2,3,*querySet,*dataSet,*index);
+    print_vector_two(res);
+    cout<<"*********************************"<<endl;
+
+    updateIndex(6,13,*querySet,*dataSet,*index);
+    updateIndex(13,6,*querySet,*dataSet,*index);
+    res = subgraph_Match(6,13,*querySet,*dataSet,*index);
+    print_vector_two(res);
+    cout<<"*********************************"<<endl;
+
+    updateIndex(11,12,*querySet,*dataSet,*index);
+    updateIndex(12,11,*querySet,*dataSet,*index);
+    res = subgraph_Match(11,12,*querySet,*dataSet,*index);
+    print_vector_two(res);
+    cout<<"*********************************"<<endl;
+
+
+    return 0;
     cout<<"++++++++++++++++"<<endl;
     Match m1(*querySet);
     m1.getPath(*querySet,1);

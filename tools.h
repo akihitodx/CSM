@@ -20,12 +20,21 @@ void print_vector_one(const vector<T> &vec){
 template<typename T>
 void print_vector_two(const vector<vector<T>> &vec){
     for (auto i:vec) {
-        for(auto j: vec){
+        for(auto j: i){
             cout<<j<<" ";
         }
         cout<<endl;
     }
 }
+
+//void print_vector_two(const vector<vector<int>> &vec){
+//    for (auto i:vec) {
+//        for(auto j: vec){
+//            cout<<j<<" ";
+//        }
+//        cout<<endl;
+//    }
+//}
 //
 
 //

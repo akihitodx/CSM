@@ -47,6 +47,8 @@ public:
 //    Kernel *kernel; //for query
     unordered_map<int,vector<int>> kernel_nei_unkernel; //for query
     unordered_map<int,unordered_set<int>> kernel_adj; //for query
+    set<vector<int>> kernel_kernel;
+    set<vector<int>> kernel_unkernel;
 public:
     void readGraph(string &path);
     void printGraph();
@@ -58,6 +60,7 @@ public:
     void print_kernel();
     void print_kernel_nei_unkernel();
     void set_kernel();
+    void set_kernel_edge();
 };
 
 class Match{
@@ -113,6 +116,7 @@ void get_All_kernel(int is_query, Match &match, Graph &query, Graph &data, Index
 
 void get_All_unkernel(Match &match,Graph &query,Graph &data,Index &index);
 
+vector<vector<int>> fork_vec(vector<vector<vector<int>>> &match);
 #endif //CSM_ALG_H
 
 
