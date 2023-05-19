@@ -442,17 +442,41 @@ vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &
         }
     }
     for (auto match: should_match) {
-        bool f1,f2;
+        bool f1,f2,ff;
         if (label_a == edge_ab.first) {
             f1 = query.kernel_set.find(match.first) != query.kernel_set.end();
             f2 = query.kernel_set.find(match.second) != query.kernel_set.end();
+            ff = true;
         } else {
             f2 = query.kernel_set.find(match.first) != query.kernel_set.end();
             f1 = query.kernel_set.find(match.second) != query.kernel_set.end();
+            ff = false;
         }
 
         if (f1 && f2) {
             //都是核心点
+            int q_a,q_b;
+            if(ff){
+                q_a = match.first;
+                q_b = match.second;
+            }else{
+                q_b = match.first;
+                q_a = match.second;
+            }
+            Match mm(query);
+            mm.getPath(query,q_a,q_b);
+            mm.getUnkernel_path(query,q_a,q_b);
+            if(ff){
+                mm.match_table[q_a].push_back(node_a);
+                mm.match_table[q_b].push_back(node_b);
+            }else{
+                mm.match_table[q_a].push_back(node_b);
+                mm.match_table[q_b].push_back(node_a);
+            }
+            get_All_kernel(q_a,mm,query,data,index);
+            get_All_unkernel(mm,query,data,index);
+            auto r = fork_vec(mm.res_second);
+            res.insert(res.end(),r.begin(),r.end());
 
         } else {
             //只存在一个核心点
@@ -492,9 +516,11 @@ void rollback(int &loc,vector<int> &temp,vector<vector<int>> &path,vector<vector
     int count = path[loc].size();
     for(int j = 0; j<count;++j){
         int i = path[loc][j];
-        temp[loc++] = i;
+        temp[loc] = i;
+        ++loc;
         rollback(loc,temp,path,res);
-        temp[loc--] = -1;
+        --loc;
+        temp[loc] = -1;
     }
 }
 vector<vector<int>> fork_vec(vector<vector<vector<int>>> &match){
