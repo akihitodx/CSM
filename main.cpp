@@ -95,7 +95,7 @@ int main() {
     print_vector_two(res);
     cout<<"*********************************"<<endl;
 
-    //两种可能 需要set hash一下 要不就要想办法去重
+    //两种可能 需要set hash一下 要不就要想办法去重。
 
     return 0;
     cout<<"++++++++++++++++"<<endl;
