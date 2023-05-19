@@ -36,11 +36,11 @@ int main() {
 
     Graph *querySet = new Graph();
     querySet->readGraph(queryPath);
-    querySet->printGraph();
-    querySet->print_edge_count();
+//    querySet->printGraph();
+//    querySet->print_edge_count();
     querySet->set_kernel();
-    querySet->print_kernel();
-    querySet->print_kernel_nei_unkernel();
+//    querySet->print_kernel();
+//    querySet->print_kernel_nei_unkernel();
 
     end = clock();
     elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
@@ -50,7 +50,7 @@ int main() {
 
     Graph *dataSet = new Graph();
     dataSet->readGraph(dataPath);
-    dataSet->printGraph();
+//    dataSet->printGraph();
 
     end = clock();
     elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
@@ -62,9 +62,9 @@ int main() {
     end = clock();
     elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
     cout<<"elapsedTime:"<<elapsedTime<<endl;
-    index->print_all();
+//    index->print_all();
     vector<vector<int>> res;
-
+    cout<<"*********************************"<<endl;
     begin = clock();
     updateIndex(2,3,*querySet,*dataSet,*index);
     updateIndex(3,2,*querySet,*dataSet,*index);
