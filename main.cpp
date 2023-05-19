@@ -5,7 +5,7 @@
 //#include <assert.h>
 #include <map>
 #include "tools.h"
-
+#include <ctime>
 
 int main() {
 //    string queryPath = "../test/querySet";
@@ -25,44 +25,73 @@ int main() {
 //
 //    string queryPath = "../test/querySet";
 //a
+    clock_t begin,end;
+    double elapsedTime;
+
+
     string queryPath = "../test/querySet";
+    string dataPath = "../test/dataSet";
+
+    begin = clock();
+
     Graph *querySet = new Graph();
     querySet->readGraph(queryPath);
     querySet->printGraph();
     querySet->print_edge_count();
-
     querySet->set_kernel();
     querySet->print_kernel();
     querySet->print_kernel_nei_unkernel();
 
-    string dataPath = "../test/dataSet";
+    end = clock();
+    elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
+    cout<<"elapsedTime:"<<elapsedTime<<endl;
+
+    begin = clock();
+
     Graph *dataSet = new Graph();
     dataSet->readGraph(dataPath);
     dataSet->printGraph();
 
+    end = clock();
+    elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
+    cout<<"elapsedTime:"<<elapsedTime<<endl;
+
+    begin = clock();
     Index *index = new Index(querySet->vNum,dataSet->vNum);
     preProsessing(*querySet,*dataSet,*index);
-
-
-
+    end = clock();
+    elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
+    cout<<"elapsedTime:"<<elapsedTime<<endl;
     index->print_all();
     vector<vector<int>> res;
 
+    begin = clock();
     updateIndex(2,3,*querySet,*dataSet,*index);
     updateIndex(3,2,*querySet,*dataSet,*index);
     res = subgraph_Match(2,3,*querySet,*dataSet,*index);
+    end = clock();
+    elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
+    cout<<"elapsedTime:"<<elapsedTime<<endl;
     print_vector_two(res);
     cout<<"*********************************"<<endl;
 
+    begin = clock();
     updateIndex(6,13,*querySet,*dataSet,*index);
     updateIndex(13,6,*querySet,*dataSet,*index);
     res = subgraph_Match(6,13,*querySet,*dataSet,*index);
+    end = clock();
+    elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
+    cout<<"elapsedTime:"<<elapsedTime<<endl;
     print_vector_two(res);
     cout<<"*********************************"<<endl;
 
+    begin = clock();
     updateIndex(11,12,*querySet,*dataSet,*index);
     updateIndex(12,11,*querySet,*dataSet,*index);
     res = subgraph_Match(11,12,*querySet,*dataSet,*index);
+    end = clock();
+    elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
+    cout<<"elapsedTime:"<<elapsedTime<<endl;
     print_vector_two(res);
     cout<<"*********************************"<<endl;
 
