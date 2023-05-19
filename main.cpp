@@ -48,22 +48,6 @@ int main() {
     index->print_all();
 
 
-//cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl;
-//    updateIndex(5,0,*querySet,*dataSet,com_index,miss_index);
-//    print_com_index(com_index);
-//    print_miss_index(miss_index);
-//    cout<<"!!!!!!!!!"<<endl;
-//    updateIndex(0,5,*querySet,*dataSet,com_index,miss_index);
-//    print_com_index(com_index);
-//    print_miss_index(miss_index);
-//    cout<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl;
-//    updateIndex(6,0,*querySet,*dataSet,com_index,miss_index);
-//    updateIndex(0,6,*querySet,*dataSet,com_index,miss_index);
-//    print_com_index(com_index);
-//    print_miss_index(miss_index);
-//    updateIndex(6,13,*querySet,*dataSet,*index);
-//    updateIndex(13,6,*querySet,*dataSet,*index);
-//    subgraph_Match(6,13,*querySet,*dataSet,*index);
     updateIndex(2,3,*querySet,*dataSet,*index);
     updateIndex(3,2,*querySet,*dataSet,*index);
     index->print_all();
