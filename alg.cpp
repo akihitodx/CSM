@@ -214,20 +214,6 @@ void Graph::set_kernel() {
 
 }
 
-void Graph::set_kernel_edge() {
-    unordered_set<int> over;
-    for(auto id: kernel_set){
-        over.insert(id);
-        for(auto next: kernel_adj[id]){
-            if(over.find(next)==over.end()){
-                vector<int> temp = {id,next};
-                kernel_kernel.insert(temp);
-
-            }
-        }
-    }
-}
-
 unordered_set<int> findKernel(const Graph &graph) {
     int nodeNum = graph.vNum;
     unordered_set<int> kernel_set;
