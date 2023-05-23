@@ -17,9 +17,9 @@ public:
 
 class Index{
 public:
-    vector<unordered_set<int>> com_index;
-    vector<unordered_set<int>> com_index_query;
-    vector<multimap<int,int>> miss_index;
+    vector<unordered_set<int>> com_index;  //data_id: query_id...
+    vector<unordered_set<int>> com_index_query; //query_id: data_id...
+    vector<multimap<int,int>> miss_index; //data_id: query_id->miss_query_id
 
 public:
     Index(int queryNum,int dataNum);
