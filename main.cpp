@@ -74,7 +74,7 @@ int main() {
     cout<<"elapsedTime:"<<elapsedTime<<endl;
     print_vector_two(res);
     cout<<"*********************************"<<endl;
-
+//a
     begin = clock();
     updateIndex(6,13,*querySet,*dataSet,*index);
     updateIndex(13,6,*querySet,*dataSet,*index);
