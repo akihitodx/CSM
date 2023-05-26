@@ -60,6 +60,11 @@ int main() {
     Index *index = new Index(querySet->vNum,dataSet->vNum);
     preProsessing(*querySet,*dataSet,*index);
     end = clock();
+
+    index->print_all();
+
+
+
     elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
     cout<<"elapsedTime:"<<elapsedTime<<endl;
 //    index->print_all();
@@ -67,14 +72,17 @@ int main() {
     cout<<"*********************************"<<endl;
     begin = clock();
     updateIndex(2,3,*querySet,*dataSet,*index);
+
+    index->print_all();
     updateIndex(3,2,*querySet,*dataSet,*index);
+    index->print_all();
     res = subgraph_Match(2,3,*querySet,*dataSet,*index);
     end = clock();
     elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
     cout<<"elapsedTime:"<<elapsedTime<<endl;
     print_vector_two(res);
     cout<<"*********************************"<<endl;
-//a
+
     begin = clock();
     updateIndex(6,13,*querySet,*dataSet,*index);
     updateIndex(13,6,*querySet,*dataSet,*index);
