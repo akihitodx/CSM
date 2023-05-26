@@ -24,7 +24,7 @@ int main() {
 //    string queryPath = "../test/querySet";
 //
 //    string queryPath = "../test/querySet";
-//a
+
     clock_t begin,end;
     double elapsedTime;
 
