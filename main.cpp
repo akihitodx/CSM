@@ -68,6 +68,9 @@ int main() {
     elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
     cout<<"elapsedTime:"<<elapsedTime<<endl;
 //    index->print_all();
+
+/*
+
     vector<vector<int>> res;
     cout<<"*********************************"<<endl;
     begin = clock();
@@ -81,6 +84,11 @@ int main() {
     elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
     cout<<"elapsedTime:"<<elapsedTime<<endl;
     print_vector_two(res);
+    set<vector<int>> ss;
+    for(auto i: res){
+        ss.insert(i);
+    }
+    cout<<ss.size()<<endl;
     cout<<"*********************************"<<endl;
 
     begin = clock();
@@ -91,7 +99,14 @@ int main() {
     elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
     cout<<"elapsedTime:"<<elapsedTime<<endl;
     print_vector_two(res);
+    ss.clear();
+    for(auto i: res){
+        ss.insert(i);
+    }
+    cout<<ss.size()<<endl;
     cout<<"*********************************"<<endl;
+
+
 
     begin = clock();
     updateIndex(11,12,*querySet,*dataSet,*index);
@@ -103,20 +118,35 @@ int main() {
     print_vector_two(res);
     cout<<"*********************************"<<endl;
 
+    ss.clear();
+    for(auto i: res){
+        ss.insert(i);
+    }
+    cout<<ss.size()<<endl;
     //两种可能 需要set hash一下 要不就要想办法去重
 
     return 0;
+*/
+
+
     cout<<"++++++++++++++++"<<endl;
+    begin = clock();
+    updateIndex(2,3,*querySet,*dataSet,*index);
+    updateIndex(3,2,*querySet,*dataSet,*index);
     Match m1(*querySet);
     m1.getPath(*querySet,1);
     m1.getUnkernel_path(*querySet,1);
     m1.match_table[1].push_back(3);
     get_All_kernel(3,m1,*querySet,*dataSet,*index);
-    m1.print_res();
+//    m1.print_res();
     get_All_unkernel(m1,*querySet,*dataSet,*index);
+    end = clock();
+    elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
+    cout<<"elapsedTime:"<<elapsedTime<<endl;
     m1.print_res_second();
 
     cout<<"++++++++++++++++"<<endl;
+    begin = clock();
     updateIndex(6,13,*querySet,*dataSet,*index);
     updateIndex(13,6,*querySet,*dataSet,*index);
     Match m2(*querySet);
@@ -124,11 +154,15 @@ int main() {
     m2.getUnkernel_path(*querySet,2);
     m2.match_table[2].push_back(6);
     get_All_kernel(6,m2,*querySet,*dataSet,*index);
-    m2.print_res();
+//    m2.print_res();
     get_All_unkernel(m2,*querySet,*dataSet,*index);
+    end = clock();
+    elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
+    cout<<"elapsedTime:"<<elapsedTime<<endl;
     m2.print_res_second();
 
     cout<<"++++++++++++++++"<<endl;
+    begin = clock();
     updateIndex(11,12,*querySet,*dataSet,*index);
     updateIndex(12,11,*querySet,*dataSet,*index);
     Match m3(*querySet);
@@ -136,8 +170,11 @@ int main() {
     m3.getUnkernel_path(*querySet,4);
     m3.match_table[4].push_back(11);
     get_All_kernel(11,m3,*querySet,*dataSet,*index);
-    m3.print_res();
+//    m3.print_res();
     get_All_unkernel(m3,*querySet,*dataSet,*index);
+    end = clock();
+    elapsedTime = static_cast<double>(end-begin) / CLOCKS_PER_SEC;
+    cout<<"elapsedTime:"<<elapsedTime<<endl;
     m3.print_res_second();
 
     return 0;

@@ -452,7 +452,7 @@ vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &
             f1 = query.kernel_set.find(match.second) != query.kernel_set.end();
             ff = false;
         }
-
+        Match mm(query);
         if (f1 && f2) {
             //都是核心点
             int q_a,q_b;
@@ -463,7 +463,6 @@ vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &
                 q_b = match.first;
                 q_a = match.second;
             }
-            Match mm(query);
             mm.getPath(query,q_a,q_b);
             mm.getUnkernel_path(query,q_a,q_b);
             if(ff){
@@ -475,8 +474,6 @@ vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &
             }
             get_All_kernel(q_a,mm,query,data,index);
             get_All_unkernel(mm,query,data,index);
-            auto r = fork_vec(mm.res_second);
-            res.insert(res.end(),r.begin(),r.end());
 
         } else {
             //只存在一个核心点
@@ -486,7 +483,6 @@ vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &
             } else {
                 is_query = match.second;
             }
-            Match mm(query);
             mm.getPath(query,is_query);
             mm.getUnkernel_path(query,is_query);
             if(f1){
@@ -498,9 +494,12 @@ vector<vector<int>> subgraph_Match(int node_a, int node_b, Graph &query, Graph &
             }
 
             get_All_unkernel(mm,query,data,index);
-            auto r = fork_vec(mm.res_second);
-            res.insert(res.end(),r.begin(),r.end());
+
         }
+
+//        auto r = fork_vec(mm.res_second);
+//        res.insert(res.end(),r.begin(),r.end());
+
 
     }
 
